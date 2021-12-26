@@ -126,7 +126,7 @@ static const stm32_hal_adc_channel ADC_MAIN_channels[] = {
     {ADC_CHANNEL_POT3,    ADC_SAMPTIME},
     {ADC_CHANNEL_SLIDER1, ADC_SAMPTIME},
     {ADC_CHANNEL_SLIDER2, ADC_SAMPTIME},
-#elif defined(PCBNV14)
+#elif defined(PCBNV14) || defined(PCBPL18)
     {ADC_CHANNEL_POT1, ADC_SAMPTIME},
     {ADC_CHANNEL_POT2, ADC_SAMPTIME},
     {ADC_CHANNEL_SWA,  ADC_SAMPTIME},
@@ -192,7 +192,7 @@ static const stm32_hal_adc_channel ADC_EXT_channels[] = {
 
 static uint8_t ADC_EXT_get_nconv() { return 1; }
 
-#elif defined(PCBNV14)
+#elif defined(PCBNV14) || defined(PCBPL18)
 
 static const stm32_hal_adc_channel ADC_EXT_channels[] = {
     {ADC_CHANNEL_SWB, ADC_SAMPTIME},

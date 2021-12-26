@@ -18,6 +18,10 @@ boards = {
         "PCBREV": "EL18",
         "DEFAULT_MODE": "1",
     },
+    "PL18": {
+        "PCB": "PL18",
+        "DEFAULT_MODE": "1",
+    },
 }
 
 translations = [

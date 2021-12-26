@@ -81,6 +81,8 @@
   #include "lua_exports_x9d.inc"
 #elif defined(PCBNV14)
   #include "lua_exports_nv14.inc"
+#elif defined(PCBPL18)
+  #include "lua/lua_exports_pl18.inc"
 #endif
 
 #include "telemetry/frsky.h"
@@ -3051,7 +3053,7 @@ LROT_BEGIN(etxcst, NULL, 0)
 #if defined(KEYS_GPIO_REG_PGUP)
   LROT_NUMENTRY( EVT_VIRTUAL_PREV_PAGE, EVT_KEY_BREAK(KEY_PGUP) )
   LROT_NUMENTRY( EVT_VIRTUAL_NEXT_PAGE, EVT_KEY_BREAK(KEY_PGDN) )
-#elif defined(PCBNV14)
+#elif defined(PCBNV14) || defined(PCBPL18)
   LROT_NUMENTRY( EVT_VIRTUAL_PREV_PAGE, EVT_KEY_BREAK(KEY_LEFT) )
   LROT_NUMENTRY( EVT_VIRTUAL_NEXT_PAGE, EVT_KEY_BREAK(KEY_RIGHT) )
 #else
