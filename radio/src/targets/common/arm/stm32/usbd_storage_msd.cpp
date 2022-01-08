@@ -47,6 +47,7 @@ enum MassstorageLuns {
 #if defined(FWDRIVE)
   STORAGE_EEPROM_LUN,
 #endif
+  STORAGE_SPI_FLASH_LUN,
   STORAGE_LUN_NBR
 };
 
@@ -80,6 +81,19 @@ const unsigned char STORAGE_Inquirydata[] = {
   'R', 'a', 'd', 'i', 'o', ' ', ' ', ' ',
   '1', '.', '0' ,'0',                      /* Version      : 4 Bytes */
 #endif
+  /* LUN 2 */
+  0x00,
+  0x80,
+  0x02,
+  0x02,
+  (USBD_STD_INQUIRY_LENGTH - 5),
+  0x00,
+  0x00,
+  0x00,
+  USB_MANUFACTURER,                        /* Manufacturer : 8 bytes */
+  USB_PRODUCT,                             /* Product      : 16 Bytes */
+  'R', 'a', 'd', 'i', 'o', ' ', ' ', ' ',
+  '1', '.', '0' ,'0',                      /* Version      : 4 Bytes */
 };
 
 #if defined(FWDRIVE)
@@ -129,6 +143,15 @@ const USBD_STORAGE_cb_TypeDef  * const USBD_STORAGE_fops = &USBD_MICRO_SDIO_fops
 }
 #endif
 
+
+uint16_t flashSpiGetSectorSize();
+uint16_t flashSpiGetPageSize();
+uint16_t flashSpiGetSectorCount();
+int flashSpiErase(size_t address);
+size_t flashSpiRead(size_t address, uint8_t* data, size_t size);
+size_t flashSpiWrite(size_t address, const uint8_t* data, size_t size);
+
+
 int8_t STORAGE_Init (uint8_t lun)
 {
   NVIC_InitTypeDef NVIC_InitStructure;
@@ -164,6 +187,17 @@ int8_t STORAGE_GetCapacity (uint8_t lun, uint32_t *block_num, uint32_t *block_si
     *block_num  = RESERVED_SECTORS + FLASHSIZE/BLOCK_SIZE;
  #endif
     return 0;
+  }  else if (lun == STORAGE_SPI_FLASH_LUN) {
+#if !defined(BOOT)
+    *block_num = flashSpiGetSectorCount();
+    *block_size = flashSpiGetSectorSize();
+//    *block_num = flashSpiGetSectorCount()*(flashSpiGetSectorSize()/512);
+//    *block_size = 512;
+#else
+    *block_num = 0;
+    *block_size = 0;
+#endif
+    return 0;
   }
 #endif
 
@@ -193,6 +227,7 @@ void usbInitLUNs()
 #if defined(FWDRIVE)
   lunReady[STORAGE_EEPROM_LUN] = 1;
 #endif
+  lunReady[STORAGE_SPI_FLASH_LUN] = 1;
 }
 
 /**
@@ -207,6 +242,11 @@ int8_t  STORAGE_IsReady (uint8_t lun)
     return (lunReady[STORAGE_EEPROM_LUN] != 0) ? 0 : -1;
   }
 #endif
+  if (lun == STORAGE_SPI_FLASH_LUN) {
+    return (lunReady[STORAGE_SPI_FLASH_LUN] != 0) ? 0 : -1;
+  }
+
+
   return (lunReady[STORAGE_SDCARD_LUN] != 0 && SD_CARD_PRESENT()) ? 0 : -1;
 }
 
@@ -239,6 +279,14 @@ int8_t STORAGE_Read (uint8_t lun,
 #if defined(FWDRIVE)
   if (lun == STORAGE_EEPROM_LUN) {
     return (fat12Read(buf, blk_addr, blk_len) == 0) ? 0 : -1;
+  } else if  (lun == STORAGE_SPI_FLASH_LUN) {
+#if !defined(BOOT)
+    uint16_t len = blk_len*flashSpiGetSectorSize();
+    uint32_t ret = flashSpiRead(blk_addr*flashSpiGetSectorSize(), buf, len);
+    return (ret==len)?0:-1;
+#else
+    return 0;
+#endif
   }
 #endif
 
@@ -264,8 +312,29 @@ int8_t STORAGE_Write (uint8_t lun,
 #if defined(FWDRIVE)
   if (lun == STORAGE_EEPROM_LUN)	{
     return (fat12Write(buf, blk_addr, blk_len) == 0) ? 0 : -1;
+  } else if  (lun == STORAGE_SPI_FLASH_LUN) {
+#if !defined(BOOT)
+    uint16_t sectSize = flashSpiGetSectorSize();
+    uint16_t len = blk_len*sectSize;
+    flashSpiErase(blk_addr*sectSize);
+    uint32_t ret = 0;
+    uint16_t writeSize = flashSpiGetPageSize();
+    for(int i=0; i<len; i+=writeSize)
+    {
+      ret |= flashSpiWrite((blk_addr*sectSize)+i, buf+i, writeSize) != writeSize;
+      if(ret)
+        break;
+    }
+    return ret;
+//    flashSpiWrite(blk_addr*512, buf, 256);
+//    flashSpiWrite((blk_addr*512)+256, buf+256, 256);
+//    return 0;
+#else
+    return 0;
+#endif
   }
 #endif
+
 
   // write without cache
   return (__disk_write(0, buf, blk_addr, blk_len) == RES_OK) ? 0 : -1;
