@@ -695,6 +695,7 @@ StringTagMappingTable Boards::getAnalogNamesLookupTable(Board::Type board)
     tbl.insert(tbl.end(), {
                               {tr("VRA").toStdString(), "POT1"},
                               {tr("VRB").toStdString(), "POT2"},
+                              {tr("VRC").toStdString(), "POT3"},
                           });
   } else if (IS_HORUS_X10(board) || IS_FAMILY_T16(board)) {
     tbl.insert(tbl.end(), {
