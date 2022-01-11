@@ -413,9 +413,10 @@ void ModelSetupPage::build(FormWindow * window)
   form->setFlexLayout(LV_FLEX_FLOW_ROW, lv_dpx(PAGE_PADDING));
   lv_obj_set_grid_dsc_array(form->getLvObj(), col_dsc, row_dsc);
 
+#if defined(HARDWARE_INTERNAL_MODULE)  
   Window* btn = new IntmoduleButton(form);
   lv_obj_set_grid_cell(btn->getLvObj(), LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
-
+#endif
   btn = new ExtmoduleButton(form);
   lv_obj_set_grid_cell(btn->getLvObj(), LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
 
