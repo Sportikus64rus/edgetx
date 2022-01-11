@@ -135,7 +135,7 @@ const int16_t sineValues[] =
     -784, -588, -392, -196,
 };
 
-#if defined(SDCARD)
+#if defined(SDCARD) || defined(SPI_FLASH)
 
 const char * const unitsFilenames[] = {
   "",
@@ -271,33 +271,35 @@ void referenceSystemAudioFiles()
 {
   static_assert(sizeof(audioFilenames)==AU_SPECIAL_SOUND_FIRST*sizeof(char *), "Invalid audioFilenames size");
   char path[AUDIO_FILENAME_MAXLEN+1];
-  FILINFO fno;
-  DIR dir;
+  VfsFileInfo fno;
+  VfsDir dir;
+  VirtualFS& vfs = VirtualFS::instance();
 
   sdAvailableSystemAudioFiles.reset();
 
   char * filename = strAppendSystemAudioPath(path);
   *(filename-1) = '\0';
 
-  FRESULT res = f_opendir(&dir, path);        /* Open the directory */
-  if (res == FR_OK) {
+  VfsError res = vfs.openDir(dir, path);        /* Open the directory */
+  if (res == VfsError::OK) {
     for (;;) {
-      res = f_readdir(&dir, &fno);                   /* Read a directory item */
-      if (res != FR_OK || fno.fname[0] == 0) break;  /* Break on error or end of dir */
-      uint8_t len = strlen(fno.fname);
+      res = vfs.readDir(dir, fno);                   /* Read a directory item */
+      std::string fname = fns.getName();
+      if (res != VfsError::OK || fname.length() == 0) break;  /* Break on error or end of dir */
+      uint8_t len = fname.length();
 
       // Eliminates directories / non wav files
-      if (len < 5 || strcasecmp(fno.fname+len-4, SOUNDS_EXT) || (fno.fattrib & AM_DIR)) continue;
+      if (len < 5 || strcasecmp(fname.c_str()+len-4, SOUNDS_EXT) || (fno.fattrib & AM_DIR)) continue;
 
       for (int i=0; i<AU_SPECIAL_SOUND_FIRST; i++) {
         getSystemAudioFile(path, i);
-        if (!strcasecmp(filename, fno.fname)) {
+        if (fname != filename) {
           sdAvailableSystemAudioFiles.setBit(i);
           break;
         }
       }
     }
-    f_closedir(&dir);
+    dir.close();
   }
 }
 
@@ -381,10 +383,10 @@ void referenceModelAudioFiles()
   *(filename-1) = '\0';
 
   FRESULT res = f_opendir(&dir, path);        /* Open the directory */
-  if (res == FR_OK) {
+  if (res == VfsError::OK) {
     for (;;) {
       res = f_readdir(&dir, &fno);                   /* Read a directory item */
-      if (res != FR_OK || fno.fname[0] == 0) break;  /* Break on error or end of dir */
+      if (res != VfsError::OK || fno.fname[0] == 0) break;  /* Break on error or end of dir */
       uint8_t len = strlen(fno.fname);
       bool found = false;
 
@@ -490,11 +492,11 @@ void playModelName()
   audioQueue.playFile(filename);
 }
 
-#else   // defined(SDCARD)
+#else   // defined(SDCARD) || defined(SPI_FLASH)
 
 #define isAudioFileReferenced(i, f) false
 
-#endif  // defined(SDCARD)
+#endif  // defined(SDCARD) || defined(SPI_FLASH)
 
 
 AudioQueue audioQueue __DMA;      // to place it in the RAM section on Horus, to have file buffers in RAM for DMA access
@@ -542,25 +544,26 @@ inline void mixSample(audio_data_t * result, int sample, unsigned int fade)
   *result = limit(AUDIO_DATA_MIN, *result + ((sample >> fade) >> (16-AUDIO_BITS_PER_SAMPLE)), AUDIO_DATA_MAX);
 }
 
-#if defined(SDCARD)
+#if defined(SDCARD) || defined(SPI_FLASH)
 
 #define RIFF_CHUNK_SIZE 12
 uint8_t wavBuffer[AUDIO_BUFFER_SIZE*2] __DMA;
 
 int WavContext::mixBuffer(AudioBuffer *buffer, int volume, unsigned int fade)
 {
-  FRESULT result = FR_OK;
+  VfsError result = VfsError::OK;
   UINT read = 0;
+  VirtualFS& vfs = VirtualFS::instance();
 
   if (fragment.file[1]) {
-    result = f_open(&state.file, fragment.file, FA_OPEN_EXISTING | FA_READ);
+    result = vfs.openFile(state.file, fragment.file, VfsOpenFlags::OPEN_EXISTING | VfsOpenFlags::READ);
     fragment.file[1] = 0;
-    if (result == FR_OK) {
-      result = f_read(&state.file, wavBuffer, RIFF_CHUNK_SIZE+8, &read);
-      if (result == FR_OK && read == RIFF_CHUNK_SIZE+8 && !memcmp(wavBuffer, "RIFF", 4) && !memcmp(wavBuffer+8, "WAVEfmt ", 8)) {
+    if (result == VfsError::OK) {
+      result = state.file.read(wavBuffer, RIFF_CHUNK_SIZE+8, &read);
+      if (result == VfsError::OK && read == RIFF_CHUNK_SIZE+8 && !memcmp(wavBuffer, "RIFF", 4) && !memcmp(wavBuffer+8, "WAVEfmt ", 8)) {
         uint32_t size = *((uint32_t *)(wavBuffer+16));
-        result = (size < 256 ? f_read(&state.file, wavBuffer, size+8, &read) : FR_DENIED);
-        if (result == FR_OK && read == size+8) {
+        result = (size < 256 ? state.file.read(wavBuffer, size+8, &read) : VfsError::DENIED);
+        if (result == VfsError::OK && read == size+8) {
           state.codec = ((uint16_t *)wavBuffer)[0];
           state.freq = ((uint16_t *)wavBuffer)[2];
           uint32_t *wavSamplesPtr = (uint32_t *)(wavBuffer + size);
@@ -570,13 +573,14 @@ int WavContext::mixBuffer(AudioBuffer *buffer, int volume, unsigned int fade)
             state.readSize = (state.codec == CODEC_ID_PCM_S16LE ? 2*AUDIO_BUFFER_SIZE : AUDIO_BUFFER_SIZE) / state.resampleRatio;
           }
           else {
-            result = FR_DENIED;
+            result = VfsError::DENIED;
           }
-          while (result == FR_OK && memcmp(wavSamplesPtr, "data", 4) != 0) {
-            result = f_lseek(&state.file, f_tell(&state.file)+size);
-            if (result == FR_OK) {
-              result = f_read(&state.file, wavBuffer, 8, &read);
-              if (read != 8) result = FR_DENIED;
+          while (result == VfsError::OK && memcmp(wavSamplesPtr, "data", 4) != 0) {
+#warning f_tell
+            result = state.file.lseek(f_tell(&state.file)+size);
+            if (result == VfsError::OK) {
+              result = state.file.read(wavBuffer, 8, &read);
+              if (read != 8) result = VfsError::DENIED;
               wavSamplesPtr = (uint32_t *)wavBuffer;
               size = wavSamplesPtr[1];
             }
@@ -584,26 +588,26 @@ int WavContext::mixBuffer(AudioBuffer *buffer, int volume, unsigned int fade)
           state.size = size;
         }
         else {
-          result = FR_DENIED;
+          result = VfsError::DENIED;
         }
       }
       else {
-        result = FR_DENIED;
+        result = VfsError::DENIED;
       }
     }
   }
 
-  if (result == FR_OK) {
+  if (result == VfsError::OK) {
     read = 0;
-    result = f_read(&state.file, wavBuffer, state.readSize, &read);
-    if (result == FR_OK) {
+    result = state.file.read(wavBuffer, state.readSize, &read);
+    if (result == VfsError::OK) {
       if (read > state.size) {
         read = state.size;
       }
       state.size -= read;
 
       if (read != state.readSize) {
-        f_close(&state.file);
+        state.fileclose();
         fragment.clear();
       }
 
@@ -621,7 +625,7 @@ int WavContext::mixBuffer(AudioBuffer *buffer, int volume, unsigned int fade)
     }
   }
 
-  if (result != FR_OK) {
+  if (result != VfsError::OK) {
     clear();
   }
   return 0;
@@ -865,7 +869,7 @@ void AudioQueue::playTone(uint16_t freq, uint16_t len, uint16_t pause, uint8_t f
   RTOS_UNLOCK_MUTEX(audioMutex);
 }
 
-#if defined(SDCARD)
+#if defined(SDCARD) || defined(SPI_FLASH)
 void AudioQueue::playFile(const char * filename, uint8_t flags, uint8_t id)
 {
 #if defined(SIMU)
@@ -1059,7 +1063,7 @@ void audioEvent(unsigned int index)
   }
 
   if (g_eeGeneral.beepMode >= e_mode_nokeys || (g_eeGeneral.beepMode >= e_mode_alarms && index <= AU_ERROR)) {
-#if defined(SDCARD)
+#if defined(SDCARD) || defined(SPI_FLASH)
     char filename[AUDIO_FILENAME_MAXLEN + 1];
     if (index < AU_SPECIAL_SOUND_FIRST && isAudioFileReferenced(index, filename)) {
       audioQueue.stopPlay(ID_PLAY_PROMPT_BASE + index);
@@ -1218,7 +1222,7 @@ void audioEvent(unsigned int index)
   }
 }
 
-#if defined(SDCARD)
+#if defined(SDCARD) || defined(SPI_FLASH)
 void pushUnit(uint8_t unit, uint8_t idx, uint8_t id)
 {
   if (unit < DIM(unitsFilenames)) {
@@ -1236,7 +1240,7 @@ void pushUnit(uint8_t unit, uint8_t idx, uint8_t id)
 
 void pushPrompt(uint16_t prompt, uint8_t id)
 {
-#if defined(SDCARD)
+#if defined(SDCARD) || defined(SPI_FLASH)
   char filename[AUDIO_FILENAME_MAXLEN+1];
   char * str = strAppendSystemAudioPath(filename);
   strcpy(str, "0000" SOUNDS_EXT);
