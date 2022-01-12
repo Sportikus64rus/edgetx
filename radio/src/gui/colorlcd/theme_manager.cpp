@@ -140,13 +140,16 @@ ThemeFile::ThemeFile(std::string themePath, bool loadYAML) :
       deSerialize();
   }
 
+  VfsFile file;
   auto found = path.rfind('/');
   if (found != std::string::npos) {
     int n = 0;
     while (n < MAX_FILES) {
       auto baseFileName(path.substr(0, found + 1) + (n != 0 ? "screenshot" + std::to_string(n) : "logo") + ".png");
-      if (isFileAvailable(baseFileName.c_str(), true)) {
+      VfsError result = VirtualFS::instance().openFile(file, baseFileName, VfsOpenFlags::OPEN_EXISTING);
+      if (result == VfsError::OK) {
         _imageFileNames.emplace_back(baseFileName);
+        file.close();
       } else {
         break;
       }
@@ -295,36 +298,36 @@ void ThemePersistance::scanForThemes()
 {
   clearThemes();
 
-  DIR dir;
-  FILINFO fno;
+  VfsDir dir;
+  VfsFileInfo fno;
 
   char fullPath[FF_MAX_LFN + 1];
 
   strAppend(fullPath, THEMES_PATH, FF_MAX_LFN);
 
   TRACE("opening directory: %s", fullPath);
-  FRESULT res = f_opendir(&dir, fullPath);  // Open the directory
-  if (res == FR_OK) {
+  VfsError res = VirtualFS::instance().openDirectory(dir, fullPath);  // Open the directory
+  if (res == VfsError::OK) {
     TRACE("scanForThemes: open successful");
     // read all entries
-    bool firstTime = true;
     for (;;) {
-      res = sdReadDir(&dir, &fno, firstTime);
-
-      if (res != FR_OK || fno.fname[0] == 0)
+      res = dir.read(fno);
+      std::string name = fno.getName();
+      if (res != VfsError::OK || name.length() == 0)
         break;  // Break on error or end of dir
 
-      if (strlen((const char *)fno.fname) > SD_SCREEN_FILE_LENGTH) continue;
-      if (fno.fattrib & AM_DIR) {
+      if (name.length() > SD_SCREEN_FILE_LENGTH) continue;
+      if (fno.getType() == VfsType::DIR) {
         char themePath[FF_MAX_LFN + 1];
         char *s = strAppend(themePath, fullPath, FF_MAX_LFN);
         s = strAppend(s, "/", FF_MAX_LFN - (s - themePath));
-        strAppend(s, fno.fname, FF_MAX_LFN - (s - themePath));
+        strAppend(s, name.c_str(), FF_MAX_LFN - (s - themePath));
+
         scanThemeFolder(themePath);
       }
     }
 
-    f_closedir(&dir);
+    dir.close();
     std::sort(themes.begin(), themes.end(),
       [](ThemeFile *a, ThemeFile *b) {
           return strcmp(a->getName(), b->getName()) < 0;
@@ -336,6 +339,9 @@ void ThemePersistance::loadDefaultTheme()
 {
   refresh();
 
+  VfsFile file;
+  VfsError status = VirtualFS::instance().openFile(file, SELECTED_THEME_FILE, VfsOpenFlags::READ);
+  if (status != VfsError::OK) return;
   int index = 0;
   bool found = false;
 
@@ -344,8 +350,8 @@ void ThemePersistance::loadDefaultTheme()
   if (g_eeGeneral.selectedTheme[0] == 0) {
     constexpr const char* SELECTED_THEME_FILE = THEMES_PATH "/selectedtheme.txt";
 
-    FIL file;
-    FRESULT status = f_open(&file, SELECTED_THEME_FILE, FA_READ);
+  status = file.read(line, 256, len);
+  if (status == VfsError::OK) {
 
     if (status == FR_OK) {
       char line[256];
@@ -368,7 +374,7 @@ void ThemePersistance::loadDefaultTheme()
           index = 0;
       }
 
-      f_close(&file);
+      file.close();
 
       // Delete old file
       f_unlink(SELECTED_THEME_FILE);
@@ -414,14 +420,14 @@ bool ThemePersistance::deleteThemeByIndex(int index)
     strcat(newFile, ".deleted");
 
     // for now we are just renaming the file so we don't find it
-    FRESULT status = f_rename(theme->getPath().c_str(), newFile);
+    VfsError status = VirtualFS::instance().rename(theme->getPath().c_str(), newFile);
     refresh();
     
     // make sure currentTheme stays in bounds
     if (getThemeIndex() >= (int) themes.size())
       setThemeIndex(themes.size() - 1);
 
-    return status == FR_OK;
+    return status == VfsError::OK;
   }
   return false;
 }
@@ -433,14 +439,18 @@ bool ThemePersistance::createNewTheme(std::string name, ThemeFile &theme)
   s = strAppend(s, "/", FF_MAX_LFN - (s - fullPath));
   s = strAppend(s, name.c_str(), FF_MAX_LFN - (s - fullPath));
 
-  if (!isFileAvailable(THEMES_PATH))
+  VirtualFS& vfs = VirtualFS::instance();
+  VfsError result;
+
+  if (!vfs.isFileAvailable(THEMES_PATH))
   {
-    FRESULT result = f_mkdir(THEMES_PATH);
-    if (result != FR_OK) return false;
+    result = vfs.makeDirectory(THEMES_PATH);
+    if (result != VfsError::OK) return false;
   }
 
-  FRESULT result = f_mkdir(fullPath);
-  if (result != FR_OK) return false;
+#warning mkdir
+  result = vfs.makeDirectory(fullPath);
+  if (result != VfsError::OK) return false;
   s = strAppend(s, "/", FF_MAX_LFN - (s - fullPath));
   strAppend(s, "theme.yml", FF_MAX_LFN - (s - fullPath));
   theme.setPath(fullPath);
