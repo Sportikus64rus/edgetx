@@ -219,7 +219,7 @@ static uint8_t ADC_EXT_get_nconv() { return NUM_ANALOGS_ADC_EXT; }
 static const stm32_hal_adc_channel ADC_EXT_channels[] = {
     {ADC_CHANNEL_POT3,     ADC_SAMPTIME},
     {ADC_CHANNEL_SLIDER1,  ADC_SAMPTIME},
-    {ADC_CHANNEL_SWH,      ADC_SAMPTIME},
+    {ADC_CHANNEL_SWH,      ADC_SAMPTIME}
 };
 
 static uint8_t ADC_EXT_get_nconv() { return NUM_ANALOGS_ADC_EXT; }
