@@ -44,8 +44,6 @@ void draw_splash_cb(lv_event_t * e)
   auto draw_ctx = lv_event_get_draw_ctx(e);
   auto splashImg = (BitmapBuffer*)lv_event_get_user_data(e);
 
-  // lcd->clear(splash_background_color);
-
   if (splashImg) {
     lv_draw_img_dsc_t img_dsc;
     lv_draw_img_dsc_init(&img_dsc);
