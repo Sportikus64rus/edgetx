@@ -23,6 +23,7 @@
 #include <sstream>
 #include "model_telemetry.h"
 #include "opentx.h"
+#include "logs.h"
 #include "libopenui.h"
 #include "lvgl_widgets/input_mix_line.h"
 

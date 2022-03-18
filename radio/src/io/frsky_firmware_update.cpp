@@ -393,7 +393,7 @@ const char * FrskyDeviceFirmwareUpdate::uploadFileToHorusXJT(const char * filena
   uint8_t index = 0;
   size_t fSize = file.size();
   while (true) {
-    progressHandler(getBasename(filename), STR_WRITING, file.tell(), fSize);
+    progressHandler(VirtualFS::getBasename(filename), STR_WRITING, file.tell(), fSize);
 
     if (file.read(buffer, 1024, count) != VfsError::OK) {
       return STR_DEVICE_FILE_ERROR;
@@ -482,7 +482,7 @@ const char *FrskyDeviceFirmwareUpdate::uploadFileNormal(
       sendDataTransfer(buffer);
 
       if (i == 0) {
-        progressHandler(getBasename(filename), STR_WRITING, file.tell(), fSize);
+        progressHandler(VirtualFS::getBasename(filename), STR_WRITING, file.tell(), fSize);
       }
     }
 
@@ -514,7 +514,7 @@ const char *FrskyDeviceFirmwareUpdate::flashFirmware(
   // switch S.PORT power OFF if supported
   modulePortSetPower(SPORT_MODULE, false);
 
-  progressHandler(getBasename(filename), STR_DEVICE_RESET, 0, 0);
+  progressHandler(VirtualFS::getBasename(filename), STR_DEVICE_RESET, 0, 0);
 
   /* wait 2s off */
   watchdogSuspend(1000 /*10s*/);

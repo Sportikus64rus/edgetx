@@ -23,6 +23,7 @@
 #include "VirtualFS.h"
 #include "io/frsky_firmware_update.h"
 #include "hal/adc_driver.h"
+#include "logs.h"
 #include "timers_driver.h"
 
 #include "tasks.h"
