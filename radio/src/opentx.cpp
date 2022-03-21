@@ -50,9 +50,7 @@
 RadioData  g_eeGeneral;
 ModelData  g_model;
 
-#if defined(SDCARD)
 Clipboard clipboard;
-#endif
 
 GlobalData globalData;
 
@@ -284,9 +282,7 @@ void per10ms()
   if (mixWarning & 4) if(((g_tmr10ms&0xFF)==128) || ((g_tmr10ms&0xFF)==136) || ((g_tmr10ms&0xFF)==144)) AUDIO_MIX_WARNING(3);
 #endif
 
-#if defined(SDCARD)
   sdPoll10ms();
-#endif
 
   outputTelemetryBuffer.per10ms();
 
@@ -1274,7 +1270,6 @@ void opentxClose(uint8_t shutdown)
 
 #if defined(SDCARD)
   logsClose();
-#endif
 
   storageFlushCurrentModel();
 
@@ -1311,9 +1306,7 @@ void opentxClose(uint8_t shutdown)
 #endif
 #endif
 
-#if defined(SDCARD)
   sdDone();
-#endif
   VirtualFS::instance().stop();
 }
 
@@ -1599,8 +1592,7 @@ void opentxInit()
   SET_POWER_REASON(0);
 #endif
 
-#if defined(SDCARD)
-  // SDCARD related stuff, only done if not unexpectedShutdown
+  // storage related stuff, only done if not unexpectedShutdown
   if (!globalData.unexpectedShutdown) {
 
     if (!sdMounted())
@@ -1630,7 +1622,6 @@ void opentxInit()
 
     logsInit();
   }
-#endif
 
 #if defined(EEPROM)
   if (!radioSettingsValid)
