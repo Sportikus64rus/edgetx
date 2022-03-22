@@ -118,12 +118,11 @@ static void scanLuaTools(std::list<ToolEntry>& scripts)
 //      if (fno.fattrib & AM_HID) continue;            /* Skip hidden files */
 //      if (fno.fattrib & AM_SYS) continue;            /* Skip system files */
 //      if (fno.fname[0] == '.') continue;  /* Ignore UNIX hidden files */
-#warning finalize VirtualFS conversion
       strcat(path, fno.getName().c_str());
       if (isRadioScriptTool(fno.getName().c_str())) {
         char toolName[RADIO_TOOL_NAME_MAXLEN + 1] = {0};
         const char * label;
-        char * ext = (char *)getFileExtension(path);
+        char * ext = (char *)VirtualFS::getFileExtension(path);
         if (readToolName(toolName, path)) {
           label = toolName;
         }
