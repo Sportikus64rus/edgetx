@@ -357,7 +357,7 @@ const char* MultiFirmwareUpdateDriver::flashFirmware(
   while (!file.eof()) {
     progressHandler(label, STR_WRITING, file.tell(), fSize);
 
-    UINT count = 0;
+    size_t count = 0;
     memclear(buffer, pageSize);
     if (file.read(buffer, pageSize, count) != VfsError::OK) {
       result = STR_DEVICE_FILE_ERROR;
@@ -486,7 +486,7 @@ const char * MultiFirmwareInformation::readMultiFirmwareInformation(const char *
 const char * MultiFirmwareInformation::readMultiFirmwareInformation(VfsFile& file)
 {
   char buffer[MULTI_SIGN_SIZE];
-  UINT count;
+  size_t count;
 
   if (file.size() < MULTI_SIGN_SIZE)
     return STR_DEVICE_FILE_ERROR;
