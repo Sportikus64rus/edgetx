@@ -78,6 +78,12 @@ void bootloaderDrawScreen(BootloaderState st, int opt, const char *str)
     lcdDrawCenteredText(7 * FH, vers);
     lcdInvertLine(7);
   }
+#if defined(SPI_FLASH) && defined(SDCARD)
+  else if (st == ST_SELECT_STORAGE) {
+    lcdDrawText(3*FW, 2*FH, "Internal", opt == 0 ? INVERS : 0);
+    lcdDrawText(3*FW, 2*FH, "SD Card", opt == 1 ? INVERS : 0);
+  }
+#endif
   else if (st == ST_USB) {
     lcdDrawCenteredText(4 * FH, TR_BL_USB_CONNECTED);
   }
