@@ -302,7 +302,7 @@ int cliRead(const char ** argv)
   while (true) {
     size_t read;
     result = file.read(buffer, sizeof(buffer), read);
-    if (result == FR_OK) {
+    if (result == VfsError::OK) {
       if (read == 0) {
         // end of file
         file.close();

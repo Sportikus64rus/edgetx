@@ -368,7 +368,7 @@ const char *FrskyDeviceFirmwareUpdate::doFlashFirmware(
 }
 
 
-const char * FrskyDeviceFirmwareUpdate::uploadFileToHorusXJT(const char * filename, VfsFile file, ProgressHandler progressHandler)
+const char * FrskyDeviceFirmwareUpdate::uploadFileToHorusXJT(const char * filename, VfsFile& file, ProgressHandler progressHandler)
 {
   uint32_t buffer[1024 / sizeof(uint32_t)];
   size_t count;

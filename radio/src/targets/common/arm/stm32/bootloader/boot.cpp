@@ -227,11 +227,23 @@ void bootloaderInitApp()
                              AUX2_SERIAL_RCC_AHB1Periph |
                              KEYS_BACKLIGHT_RCC_AHB1Periph | SD_RCC_AHB1Periph,
                              SD_RCC_AHB1Periph | FLASH_RCC_AHB1Periph, ENABLE);
+#if defined(FLASH_RCC_APB1Periph)
+  RCC_APB1PeriphClockCmd(ROTARY_ENCODER_RCC_APB1Periph | LCD_RCC_APB1Periph | BACKLIGHT_RCC_APB1Periph |
+                         INTERRUPT_xMS_RCC_APB1Periph | I2C_B1_RCC_APB1Periph | FLASH_RCC_APB1Periph |
+                         AUX_SERIAL_RCC_APB1Periph | AUX2_SERIAL_RCC_APB1Periph |
+                         SD_RCC_APB1Periph, ENABLE);
+#else
+  RCC_APB1PeriphClockCmd(ROTARY_ENCODER_RCC_APB1Periph | LCD_RCC_APB1Periph | BACKLIGHT_RCC_APB1Periph |
+                         INTERRUPT_xMS_RCC_APB1Periph | I2C_B1_RCC_APB1Periph |
+                         AUX_SERIAL_RCC_APB1Periph | AUX2_SERIAL_RCC_APB1Periph |
+                         SD_RCC_APB1Periph, ENABLE);
+#endif
 
-  RCC_APB1PeriphClockCmd(ROTARY_ENCODER_RCC_APB1Periph | LCD_RCC_APB1Periph |
-                             BACKLIGHT_RCC_APB1Periph |
-                             INTERRUPT_xMS_RCC_APB1Periph | SD_RCC_APB1Periph,
-                         ENABLE);
+#if defined(FLASH_RCC_APB2Periph)
+  RCC_APB2PeriphClockCmd(LCD_RCC_APB2Periph | BACKLIGHT_RCC_APB2Periph | RCC_APB2Periph_SYSCFG | FLASH_RCC_APB2Periph, ENABLE);
+#else
+  RCC_APB2PeriphClockCmd(LCD_RCC_APB2Periph | BACKLIGHT_RCC_APB2Periph | RCC_APB2Periph_SYSCFG, ENABLE);
+#endif
 
   RCC_APB2PeriphClockCmd(
       LCD_RCC_APB2Periph | BACKLIGHT_RCC_APB2Periph | RCC_APB2Periph_SYSCFG,
