@@ -23,7 +23,6 @@ set(BOOTLOADER_SRC
   ../../../../../targets/${TARGET_DIR}/${LCD_DRIVER}
   ../../../../../targets/${TARGET_DIR}/backlight_driver.cpp
   ../../../../../targets/${TARGET_DIR}/keys_driver.cpp
-  ../../../../../targets/${TARGET_DIR}/diskio.cpp
   ../../../../../targets/${TARGET_DIR}/board.cpp
   ../pwr_driver.cpp
   ../../../../../targets/${TARGET_DIR}/bootloader/boot_menu.cpp
@@ -42,6 +41,14 @@ set(BOOTLOADER_SRC
   bin_files.cpp
   ../../../../../VirtualFS.cpp
   )
+
+if(SDCARD OR (SPI_FLASH AND  NOT LITTLEFS)) 
+  set(BOOTLOADER_SRC
+    ${BOOTLOADER_SRC}
+  ../../../../../targets/${TARGET_DIR}/diskio.cpp
+  )
+endif()
+  
 if(SPI_FLASH)
 set(BOOTLOADER_SRC
   ${BOOTLOADER_SRC}
