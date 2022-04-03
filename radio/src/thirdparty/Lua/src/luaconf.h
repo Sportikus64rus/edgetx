@@ -11,10 +11,6 @@
 #include <limits.h>
 #include <stddef.h>
 
-#if defined(SDCARD)
-#define USE_FATFS
-#endif
-
 // force ANSI mode: lua_number2integer() behaves the same way on all platforms (#3826)
 #define LUA_ANSI
 
@@ -397,11 +393,7 @@
 @@ LUAL_BUFFERSIZE is the buffer size used by the lauxlib buffer system.
 ** CHANGE it if it uses too much C-stack space.
 */
-#if defined(USE_FATFS)
 #define LUAL_BUFFERSIZE         512
-#else
-#define LUAL_BUFFERSIZE		BUFSIZ
-#endif
 
 
 
