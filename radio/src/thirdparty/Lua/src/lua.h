@@ -414,10 +414,11 @@ struct lua_Debug {
   struct CallInfo *i_ci;  /* active function */
 };
 
+#if 0
 #include <stdio.h>
 #define lua_getc    getc
 #define lua_fclose  fclose
-
+#endif
 /* }====================================================================== */
 
 /* ROTable extensions to the standard API */
