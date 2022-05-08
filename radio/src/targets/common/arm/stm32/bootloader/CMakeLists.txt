@@ -38,8 +38,6 @@ set(BOOTLOADER_SRC
   ../stm32_usart_driver.cpp
   init.c
   boot.cpp
-  bin_files.cpp
-  ../../../../../VirtualFS.cpp
   )
 
 if(SPI_FLASH)
