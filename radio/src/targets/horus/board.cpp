@@ -95,7 +95,9 @@ void boardInit()
                          INTERRUPT_xMS_RCC_APB1Periph |
                          ADC_RCC_APB1Periph |
                          TIMER_2MHz_RCC_APB1Periph |
+#if !defined(PCBX12S) || PCBREV < 13 
                          FLASH_RCC_APB1Periph |
+#endif
                          AUDIO_RCC_APB1Periph |
 #if defined(FLYSKY_GIMBAL)
                          FLYSKY_HALL_RCC_APB1Periph |
@@ -109,6 +111,9 @@ void boardInit()
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG |
                          LCD_RCC_APB2Periph |
                          ADC_RCC_APB2Periph |
+#if defined(PCBX12S) && PCBREV >= 13 
+                         FLASH_RCC_APB2Periph |
+#endif
                          HAPTIC_RCC_APB2Periph |
                          TELEMETRY_RCC_APB2Periph |
                          BT_RCC_APB2Periph |
