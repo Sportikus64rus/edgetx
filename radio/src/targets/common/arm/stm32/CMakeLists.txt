@@ -92,7 +92,7 @@ if(GVARS)
   set(GUI_SRC ${GUI_SRC} ${GVAR_SCREEN})
 endif()
 
-set(FIRMWARE_SRC ${FIRMWARE_SRC} vfs_syscalls.cpp syscalls.c )
+set(FIRMWARE_SRC ${FIRMWARE_SRC} syscalls.c )
 
 
 foreach(FILE ${STM32USB_SRC})
