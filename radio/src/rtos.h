@@ -164,6 +164,11 @@ inline void RTOS_CREATE_TASK(pthread_t &taskId, void * (*task)(void *), const ch
     StaticSemaphore_t mutex_struct;
   } RTOS_MUTEX_HANDLE;
   
+  typedef struct {
+    SemaphoreHandle_t rtos_handle;
+    StaticSemaphore_t semaphore_struct;
+  } RTOS_SEMAPHORE_HANDLE;
+
   typedef RTOS_MUTEX_HANDLE RTOS_FLAG_HANDLE;
   
   static inline void RTOS_START()

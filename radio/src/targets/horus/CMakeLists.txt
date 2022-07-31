@@ -13,6 +13,7 @@ set(CPU_TYPE STM32F4)
 set(HSE_VALUE 12000000)
 set(SDCARD YES)
 set(STORAGE_MODELSLIST YES)
+set(SPI_FLASH YES)
 set(HAPTIC YES)
 set(GUI_DIR colorlcd)
 set(BITMAPS_DIR 480x272)
@@ -146,6 +147,9 @@ elseif (PCB STREQUAL X12S)
       message("Horus: Internal GPS is optional, use INTERNAL_GPS=YES option to enable it")
     endif()
   endif()
+  if(${PCBEV} LESS 13)
+    set(SPI_FLASH NO)
+  endif()
   set(INTERNAL_GPS_BAUDRATE "9600" CACHE STRING "Baud rate for internal GPS")
   set(AUX2_SERIAL ON) # wire to GPS
   set(FIRMWARE_TARGET_SRC
@@ -177,6 +181,15 @@ add_definitions(-DHARDWARE_TRAINER_JACK)
 add_definitions(-DSTM32_SUPPORT_32BIT_TIMERS)
 
 set(SDRAM ON)
+
+if(SPI_FLASH)
+  set(TARGET_SRC ${TARGET_SRC}
+    flash_spi_driver.cpp
+    ../../thirdparty/littlefs_v2.4.1/lfs_util.c
+    ../../thirdparty/littlefs_v2.4.1/lfs.c
+  )
+  add_definitions(-DSPI_FLASH)
+endif()
 
 if(DEFAULT_THEME)
   add_definitions(-DDEFAULT_THEME_${DEFAULT_THEME})
