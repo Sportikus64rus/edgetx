@@ -134,6 +134,8 @@ static void _setup_async_module_restart(void* p1, uint32_t p2)
   mixerTaskUnlock();
 }
 #endif
+    stopPulsesExternalModule();
+#endif
 
 // return true if the request could be posted to the timer queue
 bool restartModuleAsync(uint8_t module, uint8_t cnt_delay)
