@@ -75,7 +75,7 @@ void addRadioScriptTool(std::vector<LuaScript> luaScripts)
       char toolPath[FF_MAX_LFN + 1];
       strncpy(toolPath, luaScript.path.c_str(), sizeof(toolPath) - 1);
       *((char *)VirtualFS::getBasename(toolPath) - 1) = '\0';
-      VirtualFS::getInstance().changeDirectory(toolPath);
+      VirtualFS::instance().changeDirectory(toolPath);
 
       luaExec(luaScript.path.c_str());
     }
@@ -137,7 +137,7 @@ void menuRadioTools(event_t event)
 //      if (fno.fname[0] == '.') continue;  /* Ignore UNIX hidden files */
 
       strcat(path, name.c_str());
-      if (isRadioScriptTool(fno.fname))
+      if (isRadioScriptTool(fno.getName())) {
         char toolName[RADIO_TOOL_NAME_MAXLEN + 1] = {0};
         const char *label;
         char *ext = (char *)VirtualFS::getFileExtension(path);
