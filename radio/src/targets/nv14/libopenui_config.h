@@ -25,7 +25,7 @@
 #include "libopenui_defines.h"
 
 #include "colors.h"
-#include "board.h"
+#include "hal.h"
 #include "keys.h"
 
 enum FontIndex
