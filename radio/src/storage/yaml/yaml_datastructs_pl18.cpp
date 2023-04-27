@@ -449,7 +449,7 @@ static const struct YamlNode struct_RadioData[] = {
   YAML_PADDING( 192 ),
   YAML_PADDING( 216 ),
   YAML_STRING("currModelFilename", 17),
-  YAML_PADDING( 1 ),
+  YAML_UNSIGNED( "modelQuickSelect", 1 ),
   YAML_UNSIGNED( "blOffBright", 7 ),
   YAML_STRING("bluetoothName", 10),
   YAML_STRING("themeName", 8),
@@ -458,7 +458,7 @@ static const struct YamlNode struct_RadioData[] = {
   YAML_CUSTOM("rotEncDirection",r_rotEncDirection,nullptr),
   YAML_UNSIGNED( "rotEncMode", 2 ),
   YAML_SIGNED( "uartSampleMode", 2 ),
-  YAML_PADDING( 3 ),
+  YAML_UNSIGNED( "stickDeadZone", 3 ),
   YAML_PADDING( 1 ),
   YAML_END
 };
@@ -529,8 +529,9 @@ static const struct YamlNode struct_LimitData[] = {
 static const struct YamlNode struct_ExpoData[] = {
   YAML_UNSIGNED( "mode", 2 ),
   YAML_UNSIGNED( "scale", 14 ),
+  YAML_CUSTOM("carryTrim",r_carryTrim,nullptr),
+  YAML_SIGNED( "trimSource", 6 ),
   YAML_UNSIGNED_CUST( "srcRaw", 10, r_mixSrcRaw, w_mixSrcRaw ),
-  YAML_SIGNED( "carryTrim", 6 ),
   YAML_UNSIGNED( "chn", 5 ),
   YAML_SIGNED_CUST( "swtch", 9, r_swtchSrc, w_swtchSrc ),
   YAML_UNSIGNED_CUST( "flightModes", 9, r_flightModes, w_flightModes ),
