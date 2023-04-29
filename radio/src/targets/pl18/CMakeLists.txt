@@ -105,6 +105,7 @@ set(FIRMWARE_DEPENDENCIES datacopy)
 
 set(HARDWARE_TOUCH ON)
 set(SOFTWARE_KEYBOARD ON)
+set(FLYSKY_GIMBAL ON)
 
 add_definitions(
   -DSTM32F429_439xx -DSTM32F429xx
@@ -181,15 +182,11 @@ endif()
 set(FIRMWARE_TARGET_SRC
   ${FIRMWARE_TARGET_SRC}
   board.cpp
-  startup_stm32f42_43xxx.s
   ${LCD_DRIVER}
   ${TOUCH_DRIVER}
   sdram_driver.c
-  trainer_driver.cpp
   battery_driver.cpp
   backlight_driver.cpp
-  extmodule_helper.cpp
-  ../horus/flyskyHallStick_driver.cpp
   ../common/arm/stm32/diskio_sdio_spiflash.cpp
   )
 
@@ -197,14 +194,14 @@ set(FIRMWARE_SRC
   ${FIRMWARE_SRC}
   hal/adc_driver.cpp
   targets/common/arm/stm32/audio_dac_driver.cpp
+  boards/generic_stm32/module_ports.cpp
   targets/common/arm/stm32/stm32_hal_adc.cpp
   targets/common/arm/stm32/timers_driver.cpp
   targets/common/arm/stm32/mixer_scheduler_driver.cpp
   targets/common/arm/stm32/extmodule_driver.cpp
-  targets/common/arm/stm32/telemetry_driver.cpp
   targets/common/arm/stm32/stm32_pulse_driver.cpp
-  targets/common/arm/stm32/extmodule_serial_driver.cpp
   targets/common/arm/stm32/stm32_usart_driver.cpp
+  targets/common/arm/stm32/trainer_driver.cpp
   targets/common/arm/stm32/pwr_driver.cpp
   targets/common/arm/stm32/sdio_sd.c
   )

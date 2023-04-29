@@ -20,7 +20,12 @@
  */
  
 #include "board.h"
+#include "boards/generic_stm32/module_ports.h"
+
+#include "hal/adc_driver.h"
+#include "hal/trainer_driver.h"
 #include "tp_cst340.h"
+
 #include "globals.h"
 #if defined(SDCARD)
 #include "sdcard.h"
@@ -30,6 +35,7 @@
 
 #include "hal/adc_driver.h"
 #include "stm32_hal_adc.h"
+#include "flysky_gimbal_driver.h"
 #include "timers_driver.h"
 #include "../../debounce.h"
 
@@ -46,8 +52,6 @@ extern "C" {
 #if defined(__cplusplus) && !defined(SIMU)
 }
 #endif
-
-extern void flysky_hall_stick_init( void );
 
 HardwareOptions hardwareOptions;
 
@@ -99,19 +103,14 @@ void delay_self(int count)
 
 #define RCC_APB1PeriphOther   (TELEMETRY_RCC_APB1Periph |\
                                AUDIO_RCC_APB1Periph |\
-                               TRAINER_RCC_APB1Periph |\
                                FLYSKY_HALL_RCC_APB1Periph |\
-                               EXTMODULE_RCC_APB1Periph |\
-                               AUX_SERIAL_RCC_APB1Periph |\
                                MIXER_SCHEDULER_TIMER_RCC_APB1Periph \
                               )
 #define RCC_APB2PeriphMinimum (LCD_RCC_APB2Periph |\
                                FLASH_RCC_APB2Periph \
                               )
 #define RCC_APB2PeriphOther   (ADC_RCC_APB2Periph |\
-                               HAPTIC_RCC_APB2Periph |\
-                               AUX_SERIAL_RCC_APB2Periph |\
-                               EXTMODULE_RCC_APB2Periph \
+                               HAPTIC_RCC_APB2Periph \
                               )
 
 void boardInit()
@@ -139,10 +138,11 @@ void boardInit()
   TRACE("RCC->CSR = %08x", RCC->CSR);
 
   pwrInit();
-  extModuleInit();
+  boardInitModulePorts();
+
+  init_trainer();
   battery_charge_init();
-  globalData.flyskygimbals = true;
-  flysky_hall_stick_init();
+  globalData.flyskygimbals = flysky_gimbal_init();
   init2MhzTimer();
   init1msTimer();
   TouchInit();
