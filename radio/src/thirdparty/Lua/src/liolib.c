@@ -636,5 +636,4 @@ LROT_END(file_handle, NULL, LROT_MASK_GC)
 LUAMOD_API int luaopen_io (lua_State *L) {
   luaL_rometatable( L, LUA_FILEHANDLE,  LROT_TABLEREF(file_handle));
   return 0;
-#endif
 }

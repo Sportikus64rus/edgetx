@@ -28,6 +28,8 @@
 
 #if defined(LIBOPENUI)
   #include "libopenui.h"
+#else
+  #include "libopenui/src/libopenui_file.h"
 #endif
 
 #include "hal/module_port.h"
@@ -294,7 +296,7 @@ const char *FrskyDeviceFirmwareUpdate::doFlashFirmware(
   etx_serial_init cfg(serialInitParams);
   cfg.baudrate = 57600;
   
-  const char *ext = getFileExtension(filename);
+  const char *ext = VirtualFS::getFileExtension(filename);
   if (ext && !strcasecmp(ext, FRSKY_FIRMWARE_EXT)) {
     auto ret = file.read(&information, sizeof(FrSkyFirmwareInformation), count);
     if (ret != VfsError::OK || count != sizeof(FrSkyFirmwareInformation)) {
@@ -355,9 +357,9 @@ const char *FrskyDeviceFirmwareUpdate::doFlashFirmware(
 
   // Special update method for X12S / X10 iXJT
   if (module == INTERNAL_MODULE && port == ETX_MOD_PORT_UART && set_bootcmd != nullptr) {
-    result = uploadFileToHorusXJT(filename, &file, progressHandler);
+    result = uploadFileToHorusXJT(filename, file, progressHandler);
   } else {
-    result = uploadFileNormal(filename, &file, progressHandler);
+    result = uploadFileNormal(filename, file, progressHandler);
   }
 
   if (set_pwr) set_pwr(false);
@@ -437,7 +439,7 @@ void FrskyDeviceFirmwareUpdate::sendDataTransfer(uint32_t* buffer)
 }
 
 const char *FrskyDeviceFirmwareUpdate::uploadFileNormal(
-    const char *filename, FIL *file, ProgressHandler progressHandler)
+    const char *filename, VfsFile& file, ProgressHandler progressHandler)
 {
   uint32_t buffer[1024 / sizeof(uint32_t)];
   size_t count;
@@ -458,6 +460,7 @@ const char *FrskyDeviceFirmwareUpdate::uploadFileNormal(
   sendFrame();
 
   uint8_t retries = 0;
+  size_t fSize = file.size();
 
   while (true) {
     if (file.read(buffer, 1024, count) != VfsError::OK) {

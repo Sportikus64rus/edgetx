@@ -84,7 +84,7 @@
 #elif defined(PCBNV14)
   #include "lua_exports_nv14.inc"
 #elif defined(PCBPL18)
-  #include "lua/lua_exports_pl18.inc"
+  #include "lua_exports_pl18.inc"
 #endif
 
 #include "telemetry/frsky.h"
@@ -1380,7 +1380,7 @@ static int luaGetFlightMode(lua_State * L)
 
 Play a file from the SD card
 
-@param path (string) full path to wav file (i.e. ‚Äú/SOUNDS/en/system/tada.wav‚Äù)
+@param path (string) full path to wav file (i.e. ‚Ä?SOUNDS/en/system/tada.wav‚Ä?
 Introduced in 2.1.0: If you use a relative path, the current language is appended
 to the path (example: for English language: `/SOUNDS/en` is appended)
 

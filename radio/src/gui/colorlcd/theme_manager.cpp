@@ -290,7 +290,7 @@ void ThemePersistance::clearThemes()
 void ThemePersistance::scanThemeFolder(char *fullPath)
 {
   strncat(fullPath, "/theme.yml", FF_MAX_LFN);
-  if (isFileAvailable(fullPath, true)) {
+  if (VirtualFS::instance().isFileAvailable(fullPath, true)) {
     TRACE("scanForThemes: found file %s", fullPath);
     themes.emplace_back(new ThemeFile(fullPath));
   }
@@ -341,9 +341,6 @@ void ThemePersistance::loadDefaultTheme()
 {
   refresh();
 
-  VfsFile file;
-  VfsError status = VirtualFS::instance().openFile(file, SELECTED_THEME_FILE, VfsOpenFlags::READ);
-  if (status != VfsError::OK) return;
   int index = 0;
   bool found = false;
 
@@ -351,36 +348,35 @@ void ThemePersistance::loadDefaultTheme()
   // TODO: remove this sometime in the future
   if (g_eeGeneral.selectedTheme[0] == 0) {
     constexpr const char* SELECTED_THEME_FILE = THEMES_PATH "/selectedtheme.txt";
+    
+    VirtualFS& vfs = VirtualFS::instance();
+    VfsFile file;
+    VfsError status = vfs.openFile(file, SELECTED_THEME_FILE, VfsOpenFlags::READ);
+    if (status != VfsError::OK) return;
 
-  status = file.read(line, 256, len);
-  if (status == VfsError::OK) {
+    char line[256];
+    unsigned int len;
+    status = file.read(line, 256, len);
+    if (status == VfsError::OK) {
+      line[len] = '\0';
 
-    if (status == FR_OK) {
-      char line[256];
-      unsigned int len;
-
-      status = f_read(&file, line, 256, &len);
-      if (status == FR_OK) {
-        line[len] = '\0';
-
-        for (auto theme : themes) {
-          if (theme->getPath() == std::string(line)) {
-            found = true;
-            break;
-          }
-          index++;
+      for (auto theme : themes) {
+        if (theme->getPath() == std::string(line)) {
+          found = true;
+          break;
         }
-
-        // Force default if no match for last selected theme
-        if (!found)
-          index = 0;
+        index++;
       }
 
-      file.close();
-
-      // Delete old file
-      f_unlink(SELECTED_THEME_FILE);
+      // Force default if no match for last selected theme
+      if (!found)
+        index = 0;
     }
+
+    file.close();
+
+    // Delete old file
+    vfs.unlink(SELECTED_THEME_FILE);
 
     // Save selected theme (sets to default if nothing found)
     setDefaultTheme(index);

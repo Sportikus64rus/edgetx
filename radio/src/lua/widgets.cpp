@@ -24,9 +24,11 @@
 
 #include "opentx.h"
 #include "VirtualFS.h"
+#include "bin_allocator.h"
 #include "lua_api.h"
 
 #include "widget.h"
+#include "api_colorlcd.h"
 #include "view_main.h"
 
 #include "lua_widget.h"
@@ -42,7 +44,8 @@ extern int custom_lua_atpanic(lua_State *L);
 #define LUA_WIDGET_FILENAME "/main.lua"
 #define LUA_FULLPATH_MAXLEN                  \
   (LEN_FILE_PATH_MAX + LEN_SCRIPT_FILENAME + \
-   LEN_FILE_EXTENSION_MAX)
+   LEN_FILE_EXTENSION_MAX)  // max length (example:
+                            // /SCRIPTS/THEMES/mytheme.lua)
 
 static void luaHook(lua_State *L, lua_Debug *ar)
 {
@@ -162,8 +165,7 @@ ZoneOption *createOptionsArray(int reference, uint8_t maxOptions)
               option->deflt.signedValue = lua_tointeger(lsWidgets, -1);
               // TRACE("default signed = %d", option->deflt.signedValue);
             } else if (option->type == ZoneOption::Source ||
-                       option->type == ZoneOption::TextSize ||
-                       option->type == ZoneOption::Align) {
+                       option->type == ZoneOption::TextSize) {
               luaL_checktype(lsWidgets, -1, LUA_TNUMBER);  // value is number
               option->deflt.unsignedValue = lua_tounsigned(lsWidgets, -1);
               // TRACE("default unsigned = %u", option->deflt.unsignedValue);

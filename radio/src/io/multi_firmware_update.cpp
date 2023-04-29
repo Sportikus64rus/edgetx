@@ -71,7 +71,7 @@ class MultiFirmwareUpdateDriver
   {
   }
 
-  const char* flashFirmware(FIL* file, const char* label,
+  const char* flashFirmware(VfsFile& file, const char* label,
                             ProgressHandler progressHandler);
 };
 
@@ -561,7 +561,7 @@ bool MultiDeviceFirmwareUpdate::flashFirmware(const char * filename, ProgressHan
 
   MultiFirmwareUpdateDriver driver(module, type);
 
-  const char * result = driver->flashFirmware(file, VirtualFS::getBasename(filename), progressHandler);
+  const char * result = driver.flashFirmware(file, VirtualFS::getBasename(filename), progressHandler);
   file.close();
 
   AUDIO_PLAY(AU_SPECIAL_SOUND_BEEP1);

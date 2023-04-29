@@ -104,38 +104,33 @@ class SelectTemplate : public TemplatePage
     snprintf(path, LEN_PATH, "%s/%s", TEMPLATES_PATH, folder.c_str());
 
     std::list<std::string> files;
-    FILINFO fno;
-    DIR dir;
-    FRESULT res = f_opendir(&dir, path);
+    VirtualFS& vfs = VirtualFS::instance();
+    VfsFileInfo fno;
+    VfsDir dir;
+    VfsError res = vfs.openDirectory(dir, path);
 
     Button* firstButton = nullptr;
-  FormGridLayout grid;
-  grid.spacer(PAGE_PADDING);
-  std::list<std::string> files;
-  VirtualFS& vfs = VirtualFS::instance();
-  VfsFileInfo fno;
-  VfsDir dir;
-  VfsError res = vfs.openDirectory(dir, path);
-
-  if (res == VfsError::OK) {
-    // read all entries
-    for (;;) {
-      res = dir.read(fno);
-      if (res != VfsError::OK || fno.getName()[0] == 0)
-        break; // Break on error or end of dir
-      const char* fName = fno.getName();
-      if (strlen(fName) > STORAGE_SCREEN_FILE_LENGTH)
-        continue;
-      if (fName[0] == '.')
-        continue;
-      if (fno.getType() == VfsType::FILE) {
-        const char *ext = vfs.getFileExtension(fName);
-        if(ext && !strcasecmp(ext, YAML_EXT)) {
-          int len = ext - fName;
-          if (len < FF_MAX_LFN) {
-            char name[FF_MAX_LFN] = { 0 };
-            strncpy(name, fName, len);
-            files.push_back(name);
+  
+    if (res == VfsError::OK) {
+      // read all entries
+      for (;;) {
+        res = dir.read(fno);
+        if (res != VfsError::OK || fno.getName()[0] == 0)
+          break; // Break on error or end of dir
+        const char* fName = fno.getName();
+        if (strlen(fName) > STORAGE_SCREEN_FILE_LENGTH)
+          continue;
+        if (fName[0] == '.')
+          continue;
+        if (fno.getType() == VfsType::FILE) {
+          const char *ext = vfs.getFileExtension(fName);
+          if(ext && !strcasecmp(ext, YAML_EXT)) {
+            int len = ext - fName;
+            if (len < FF_MAX_LFN) {
+              char name[FF_MAX_LFN] = { 0 };
+              strncpy(name, fName, len);
+              files.push_back(name);
+            }
           }
         }
       }
@@ -162,7 +157,7 @@ class SelectTemplate : public TemplatePage
       }
     }
 
-  dir.close();
+    dir.close();
 
     if (files.size() == 0) {
       new StaticText(listWindow, rect_t{0, 0, lv_pct(100), lv_pct(50)},
