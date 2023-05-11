@@ -76,6 +76,21 @@ struct SpiFlashDescriptor
 
 static const SpiFlashDescriptor spiFlashDescriptors[] =
 {
+    { // MX25L25645G
+        .id = 0xC218,
+        .pageSize = 256,
+        .sectorSize = 4096,
+        .blockSize = 65536,
+        .blockCount = 512,
+
+        .readStatusCmd = 0x05,
+        .readCmd = 0x03,
+        .writeCmd = 0x02,
+        .writeEnableCmd = 0x06,
+        .eraseSectorCmd = 0x20,
+        .eraseBlockCmd = 0x52,
+        .eraseChipCmd = 0x60
+    },
     { // GD25Q127C
         .id = 0xC817,
         .pageSize = 256,
