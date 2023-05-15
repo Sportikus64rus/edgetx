@@ -81,14 +81,14 @@ static const SpiFlashDescriptor spiFlashDescriptors[] =
         .pageSize = 256,
         .sectorSize = 4096,
         .blockSize = 65536,
-        .blockCount = 512,
+        .blockCount = 512,  // > 256 will use 4 byte address automatically
 
         .readStatusCmd = 0x05,
-        .readCmd = 0x03,
-        .writeCmd = 0x02,
+        .readCmd = 0x13,  // 4 bytes address command
+        .writeCmd = 0x12,  // 4 bytes address command
         .writeEnableCmd = 0x06,
-        .eraseSectorCmd = 0x20,
-        .eraseBlockCmd = 0x52,
+        .eraseSectorCmd = 0x21,  // 4 bytes address command
+        .eraseBlockCmd = 0x5C,  // 4 bytes address command
         .eraseChipCmd = 0x60
     },
     { // GD25Q127C
@@ -294,6 +294,10 @@ size_t flashSpiRead(size_t address, uint8_t* data, size_t size)
   CS_LOW();
 
   flashSpiReadWriteByte(flashDescriptor->readCmd);
+  if (flashDescriptor->blockCount > 256)
+  {
+    flashSpiReadWriteByte((address>>24)&0xFF);
+  }
   flashSpiReadWriteByte((address>>16)&0xFF);
   flashSpiReadWriteByte((address>>8)&0xFF);
   flashSpiReadWriteByte(address&0xFF);
@@ -351,6 +355,10 @@ size_t flashSpiWrite(size_t address, const uint8_t* data, size_t size)
   CS_LOW();
 
   flashSpiReadWriteByte(flashDescriptor->writeCmd);
+  if (flashDescriptor->blockCount > 256)
+  {
+    flashSpiReadWriteByte((address>>24)&0xFF);
+  }
   flashSpiReadWriteByte((address>>16)&0xFF);
   flashSpiReadWriteByte((address>>8)&0xFF);
   flashSpiReadWriteByte(address&0xFF);
@@ -389,6 +397,10 @@ int flashSpiErase(size_t address)
   delay_01us(100); // 10us
   CS_LOW();
   flashSpiReadWriteByte(flashDescriptor->eraseSectorCmd);
+  if (flashDescriptor->blockCount > 256)
+  {
+    flashSpiReadWriteByte((address>>24)&0xFF);
+  }
   flashSpiReadWriteByte((address>>16)&0xFF);
   flashSpiReadWriteByte((address>>8)&0xFF);
   flashSpiReadWriteByte(address&0xFF);
@@ -414,6 +426,10 @@ int flashSpiBlockErase(size_t address)
   delay_01us(100); // 10us
   CS_LOW();
   flashSpiReadWriteByte(flashDescriptor->eraseBlockCmd);
+  if (flashDescriptor->blockCount > 256)
+  {
+    flashSpiReadWriteByte((address>>24)&0xFF);
+  }
   flashSpiReadWriteByte((address>>16)&0xFF);
   flashSpiReadWriteByte((address>>8)&0xFF);
   flashSpiReadWriteByte(address&0xFF);
