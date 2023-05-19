@@ -224,7 +224,7 @@ void bootloaderDrawScreen(BootloaderState st, int opt, const char* str)
 
         if (opt == FC_ERROR) {
           lcd->drawText(20, MESSAGE_TOP,
-                        LV_SYMBOL_CLOSE " " STR_INVALID_FIRMWARE,
+                        LV_SYMBOL_CLOSE " " TR_BL_INVALID_FIRMWARE,
                         BL_FOREGROUND);
         } else if (opt == FC_OK) {
           VersionTag tag;

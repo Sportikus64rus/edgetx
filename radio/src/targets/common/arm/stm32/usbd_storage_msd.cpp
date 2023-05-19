@@ -171,9 +171,11 @@ int8_t STORAGE_Init (uint8_t lun)
     return (0);
   }
 #endif
+#if defined(FWDRIVE)
   if (lun == STORAGE_EEPROM_LUN) {
     return 0;
   }
+#endif
   return -1;
 }
 

@@ -26,6 +26,7 @@ set(BOOTLOADER_SRC
   ../../../../../targets/${TARGET_DIR}/board.cpp
   ../pwr_driver.cpp
   ../../../../../targets/${TARGET_DIR}/bootloader/boot_menu.cpp
+  ../../../../../VirtualFS.cpp
   ../usbd_usr.cpp
   ../usbd_storage_msd.cpp
   ../delays_driver.cpp
@@ -38,6 +39,7 @@ set(BOOTLOADER_SRC
   ../stm32_usart_driver.cpp
   init.c
   boot.cpp
+  bin_files_vfs.cpp
   )
 
 if(SPI_FLASH)

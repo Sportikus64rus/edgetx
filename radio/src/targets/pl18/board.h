@@ -119,9 +119,9 @@ void SDRAM_Init();
 
 #define INTERNAL_MODULE_OFF()           
 #define INTERNAL_MODULE_ON()            
-void EXTERNAL_MODULE_ON();
-void EXTERNAL_MODULE_OFF();
-#define EXTERNAL_MODULE_PWR_OFF EXTERNAL_MODULE_OFF
+#define EXTERNAL_MODULE_ON()            GPIO_SetBits(EXTMODULE_PWR_GPIO, EXTMODULE_PWR_GPIO_PIN)
+#define EXTERNAL_MODULE_OFF()           GPIO_ResetBits(EXTMODULE_PWR_GPIO, EXTMODULE_PWR_GPIO_PIN)
+#define EXTERNAL_MODULE_PWR_OFF         EXTERNAL_MODULE_OFF
 #define BLUETOOTH_MODULE_ON()           GPIO_ResetBits(BT_EN_GPIO, BT_EN_GPIO_PIN)
 #define BLUETOOTH_MODULE_OFF()          GPIO_SetBits(BT_EN_GPIO, BT_EN_GPIO_PIN)
 #define IS_INTERNAL_MODULE_ON()         (false)
@@ -531,24 +531,7 @@ int32_t getVolume();
 
 // Telemetry driver
 #define INTMODULE_FIFO_SIZE            512
-#define TELEMETRY_FIFO_SIZE             512
-void telemetryPortInit(uint32_t baudrate, uint8_t mode);
-void telemetryPortSetDirectionOutput();
-void telemetryPortSetDirectionInput();
-void sportSendBuffer(const uint8_t * buffer, uint32_t count);
-bool sportGetByte(uint8_t * byte);
-void telemetryClearFifo();
-void sportSendByte(uint8_t byte);
-extern uint32_t telemetryErrors;
-
-// soft-serial
-void telemetryPortInvertedInit(uint32_t baudrate);
-
-// Sport update driver
-#define SPORT_UPDATE_POWER_ON()
-#define SPORT_UPDATE_POWER_OFF()
-#define SPORT_UPDATE_POWER_INIT()
-#define IS_SPORT_UPDATE_POWER_ON()     (false)
+#define TELEMETRY_FIFO_SIZE            512
 
 // Haptic driver
 void hapticInit();
@@ -560,34 +543,9 @@ void hapticOn(uint32_t pwmPercent);
 //#define AUX_SERIAL
 #define DEBUG_BAUDRATE                  115200
 #define LUA_DEFAULT_BAUDRATE            115200
-extern uint8_t auxSerialMode;
-#if defined __cplusplus
-void auxSerialSetup(unsigned int baudrate, bool dma, uint16_t length = USART_WordLength_8b, uint16_t parity = USART_Parity_No, uint16_t stop = USART_StopBits_1);
-#endif
-void auxSerialInit(unsigned int mode, unsigned int protocol);
-void auxSerialPutc(char c);
-#define auxSerialTelemetryInit(protocol) auxSerialInit(UART_MODE_TELEMETRY, protocol)
-void auxSerialSbusInit();
-void auxSerialStop();
-#if defined(AUX_SERIAL_PWR_GPIO)
-#define AUX_SERIAL_POWER_ON()            auxSerialPowerOn()
-#define AUX_SERIAL__POWER_OFF()          auxSerialPowerOff()
-#else
-#define AUX_SERIAL_POWER_ON()
-#define AUX_SERIAL__POWER_OFF()
-#endif
-#define USART_FLAG_ERRORS               (USART_FLAG_ORE | USART_FLAG_NE | USART_FLAG_FE | USART_FLAG_PE)
 
 extern uint8_t currentTrainerMode;
 void checkTrainerSettings();
-
-#if defined(__cplusplus)
-#include "fifo.h"
-#include "dmafifo.h"
-extern DMAFifo<512> telemetryFifo;
-typedef Fifo<uint8_t, 32> AuxSerialRxFifo;
-extern AuxSerialRxFifo auxSerialRxFifo;
-#endif
 
 // Touch panel driver
 bool touchPanelEventOccured();
