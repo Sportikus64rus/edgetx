@@ -1375,9 +1375,12 @@ int cliDisplay(const char ** argv)
 #endif
 #if defined(DISK_CACHE)
   else if (!strcmp(argv[1], "dc")) {
-    DiskCacheStats stats = diskCache.getStats();
-    uint32_t hitRate = diskCache.getHitRate();
-    cliSerialPrint("Disk Cache stats: w:%u r: %u, h: %u(%0.1f%%), m: %u", stats.noWrites, (stats.noHits + stats.noMisses), stats.noHits, hitRate*0.1f, stats.noMisses);
+    for (uint8_t drv = 0; drv < sizeof(diskCache) / sizeof(diskCache[0]); drv++)
+    {
+      DiskCacheStats stats = diskCache[drv].getStats();
+      uint32_t hitRate = diskCache[drv].getHitRate();
+      cliSerialPrint("Disk Cache [%d] stats: w:%u r: %u, h: %u(%0.1f%%), m: %u", drv, stats.noWrites, (stats.noHits + stats.noMisses), stats.noHits, hitRate*0.1f, stats.noMisses);
+    }
   }
 #endif
   else if (toLongLongInt(argv, 1, &address) > 0) {
