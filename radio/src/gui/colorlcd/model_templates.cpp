@@ -201,10 +201,11 @@ SelectTemplateFolder::SelectTemplateFolder(std::function<void(std::string folder
     // read all entries
     for (;;) {
       res = dir.read(fno);
-      if (res != VfsError::OK || fno.getName() == 0)
-        break; // Break on error or end of dir
       const char* fName = fno.getName();
-      if (strlen(fName) > STORAGE_SCREEN_FILE_LENGTH)
+      size_t fNameLen = strlen(fName);
+      if (res != VfsError::OK || fNameLen == 0)
+        break; // Break on error or end of dir
+      if (fNameLen > STORAGE_SCREEN_FILE_LENGTH)
         continue;
       if (fName[0] == '.')
         continue;
