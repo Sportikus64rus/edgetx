@@ -40,7 +40,7 @@ inline const char * SDCARD_ERROR(FRESULT result)
 
 
 // Will overwrite if destination exists
-const char * sdMoveFile(const char * srcPath, const char * destPath)
+/*const char * sdMoveFile(const char * srcPath, const char * destPath)
 {
   const char *result;
   result = sdCopyFile(srcPath, destPath);
@@ -73,19 +73,18 @@ const char * sdMoveFile(const char * srcFilename, const char * srcDir, const cha
     return SDCARD_ERROR(fres);
   }
   return nullptr;
-}
+}*/
 
 #if !defined(SIMU) || defined(SIMU_DISKIO)
-uint32_t sdGetNoSectors()
+/*uint32_t sdGetNoSectors()
 {
   static DWORD noSectors = 0;
   if (noSectors == 0 ) {
     disk_ioctl(0, GET_SECTOR_COUNT, &noSectors);
   }
   return noSectors;
-}
+}*/
 
-#if !defined(SIMU) || defined(SIMU_DISKIO)
 uint32_t sdGetSize()
 {
   return (sdGetNoSectors() / 1000000) * BLOCK_SIZE;
@@ -103,10 +102,10 @@ uint32_t sdGetFreeSectors()
 
 #else  // #if !defined(SIMU) || defined(SIMU_DISKIO)
 
-uint32_t sdGetNoSectors()
+/*uint32_t sdGetNoSectors()
 {
   return 0;
-}
+}*/
 
 uint32_t sdGetSize()
 {
