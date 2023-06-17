@@ -135,7 +135,7 @@ DSTATUS disk_initialize (
     // tjftl requires at least 10 free blocks after garbage collection.  Give it 16 free blocks.
     // To ensure a working tjftl the fuilesystem must be at least 10 blocks smaller than the flash memory.
     // the block and sector sizes used by tjftl are fixed. A block has 32k bytes and a sector has 512 bytes
-    tjftl = tjftl_init(flashRead, flashErase, flashWrite, nullptr, flashSize, (flashSize - 32768 * 16)/512, 0);
+    tjftl = tjftl_init(flashRead, flashErase, flashWrite, nullptr, flashSize, (flashSize - 1024*1024)/512, 0);
 
     if(tjftl == nullptr)
       stat |= STA_NOINIT;
