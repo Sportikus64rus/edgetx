@@ -284,6 +284,11 @@ size_t flashSpiGetSize()
 	return flashDescriptor->blockSize * flashDescriptor->blockCount;
 }
 
+uint32_t flashSpiGetBlockCount()
+{
+	return flashDescriptor->blockSize * flashDescriptor->blockCount;
+}
+
 size_t flashSpiRead(size_t address, uint8_t* data, size_t size)
 {
 #if !defined(BOOT) && 0
