@@ -146,10 +146,8 @@ ThemeFile::ThemeFile(std::string themePath, bool loadYAML) :
     int n = 0;
     while (n < MAX_FILES) {
       auto baseFileName(path.substr(0, found + 1) + (n != 0 ? "screenshot" + std::to_string(n) : "logo") + ".png");
-      VfsError result = VirtualFS::instance().openFile(file, baseFileName, VfsOpenFlags::OPEN_EXISTING);
-      if (result == VfsError::OK) {
+      if (VirtualFS::instance().isFileAvailable(baseFileName.c_str(), true)) {
         _imageFileNames.emplace_back(baseFileName);
-        file.close();
       } else {
         break;
       }
@@ -314,16 +312,16 @@ void ThemePersistance::scanForThemes()
     // read all entries
     for (;;) {
       res = dir.read(fno);
-      std::string name = fno.getName();
-      if (res != VfsError::OK || name.length() == 0)
+      const char *name = fno.getName();
+      if (res != VfsError::OK || name[0] == 0)
         break;  // Break on error or end of dir
 
-      if (name.length() > STORAGE_SCREEN_FILE_LENGTH) continue;
+      if (strlen(name) > STORAGE_SCREEN_FILE_LENGTH) continue;
       if (fno.getType() == VfsType::DIR) {
         char themePath[FF_MAX_LFN + 1];
         char *s = strAppend(themePath, fullPath, FF_MAX_LFN);
         s = strAppend(s, "/", FF_MAX_LFN - (s - themePath));
-        strAppend(s, name.c_str(), FF_MAX_LFN - (s - themePath));
+        strAppend(s, name, FF_MAX_LFN - (s - themePath));
 
         scanThemeFolder(themePath);
       }

@@ -262,9 +262,9 @@ int cliLs(const char ** argv)
   if (res == VfsError::OK) {
     for (;;) {
       res = dir.read(fno);                   /* Read a directory item */
-      std::string name = fno.getName();
-      if (res != VfsError::OK || name.length() == 0) break;  /* Break on error or end of dir */
-      cliSerialPrint(name.c_str());
+      const char *name = fno.getName();
+      if (res != VfsError::OK || name[0] == 0) break;  /* Break on error or end of dir */
+      cliSerialPrint(name);
     }
     dir.close();
   }

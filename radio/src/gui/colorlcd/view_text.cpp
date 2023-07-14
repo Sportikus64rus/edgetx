@@ -200,7 +200,7 @@ bool openNotes(const char buf[], std::string modelNotesName)
 {
   std::string fullPath = std::string(buf) + PATH_SEPARATOR + modelNotesName;
 
-  if (VirtualFS::instance().isFileAvailable(modelNotesName.c_str())) {
+  if (VirtualFS::instance().isFileAvailable(fullPath.c_str())) {
     new ViewTextWindow(std::string(buf), modelNotesName, ICON_MODEL);
     return true;
   } else {
