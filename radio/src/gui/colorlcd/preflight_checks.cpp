@@ -152,7 +152,7 @@ PreflightChecks::PreflightChecks() : Page(ICON_MODEL_SETUP)
   new SwitchWarnMatrix(line, rect_t{});
 
   // Pots and sliders warning
-  if (adcGetMaxInputs(ADC_INPUT_POT) > 0) {
+  if (adcGetMaxInputs(ADC_INPUT_FLEX) > 0) {
     line = form->newLine(&grid);
     new StaticText(line, rect_t{}, STR_POTWARNINGSTATE, 0, COLOR_THEME_PRIMARY1);
     auto pots_wm = new Choice(line, rect_t{}, STR_PREFLIGHT_POTSLIDER_CHECK, 0, 2,
@@ -207,7 +207,7 @@ SwitchWarnMatrix::SwitchWarnMatrix(Window* parent, const rect_t& r) :
   uint8_t btn_id = 0;
   for (uint8_t i = 0; i < MAX_SWITCHES; i++) {
     if (SWITCH_EXISTS(i)) {
-      setTextAndState(i);
+      setTextAndState(btn_id);
       btn_id++;
     }
   }
@@ -321,7 +321,7 @@ CenterBeepsMatrix::CenterBeepsMatrix(Window* parent, const rect_t& r) :
   uint8_t btn_cnt = 0;
 
   auto max_sticks = adcGetMaxInputs(ADC_INPUT_MAIN);
-  auto max_pots = adcGetMaxInputs(ADC_INPUT_POT);
+  auto max_pots = adcGetMaxInputs(ADC_INPUT_FLEX);
   max_analogs = max_sticks + max_pots;
 
   for (uint8_t i = 0; i < max_analogs; i++) {
@@ -362,7 +362,7 @@ void CenterBeepsMatrix::setTextAndState(uint8_t btn_id)
   if (ana_idx[btn_id] < max_sticks)
     setText(btn_id, getAnalogShortLabel(ana_idx[btn_id]));
   else
-    setText(btn_id, getAnalogLabel(ADC_INPUT_POT, ana_idx[btn_id] - max_sticks));
+    setText(btn_id, getAnalogLabel(ADC_INPUT_FLEX, ana_idx[btn_id] - max_sticks));
   setChecked(btn_id);
 }
 
