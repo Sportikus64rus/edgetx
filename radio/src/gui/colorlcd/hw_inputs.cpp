@@ -85,7 +85,7 @@ HWPots::HWPots(Window* parent) : FormWindow(parent, rect_t{})
                    COLOR_THEME_PRIMARY1);
 
     new HWInputEdit(line, (char*)analogGetCustomLabel(ADC_INPUT_FLEX, i), LEN_ANA_NAME);
-    new Choice(
+    auto pot = new Choice(
         line, rect_t{}, STR_POTTYPES, FLEX_NONE, FLEX_SWITCH,
         [=]() -> int {
           return bfGet<potconfig_t>(g_eeGeneral.potsConfig, POT_CFG_BITS * i,
@@ -96,6 +96,8 @@ HWPots::HWPots(Window* parent) : FormWindow(parent, rect_t{})
               g_eeGeneral.potsConfig, newValue, POT_CFG_BITS * i, POT_CFG_BITS);
           SET_DIRTY();
         });
+      pot->setAvailableHandler(
+        [=](int val) { return isPotTypeAvailable(val); });
   }
 }
 
@@ -163,7 +165,7 @@ HWSwitches::HWSwitches(Window* parent) : FormWindow(parent, rect_t{})
           [=]() -> int { return switchGetFlexConfig(i); },
           [=](int newValue) { switchConfigFlex(i, newValue); });
       channel->setAvailableHandler(
-          [=](int val) { return POT_CONFIG(val) == FLEX_SWITCH; });
+          [=](int val) { return isFlexSwitchAvailable(i,val); });
       channel->setTextHandler([=](int val) -> std::string {
         return adcGetInputLabel(ADC_INPUT_FLEX, val);
       });
