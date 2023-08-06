@@ -173,8 +173,6 @@
 #define TR_SF_SET_SCREEN               "הגדרת מסך ראשי"
 #define TR_SF_RESERVE                  "[reserve]"
 
-#define TR_VFSWFUNC                    TR_SF_SAFETY,"Trainer","Inst. Trim","Reset","Set",TR_ADJUST_GVAR,"Volume","SetFailsafe","RangeCheck","ModuleBind",TR_SOUND,TR_PLAY_TRACK,TR_PLAY_VALUE,TR_SF_RESERVE,TR_SF_PLAY_SCRIPT,TR_SF_RESERVE,TR_SF_BG_MUSIC,TR_VVARIO,TR_HAPTIC,TR_SDCLOGS,"Backlight",TR_SF_SCREENSHOT,TR_SF_RACING_MODE,TR_SF_DISABLE_TOUCH, TR_SF_SET_SCREEN TR_SF_TEST
-
 #define TR_FSW_RESET_TELEM             TR("Telm", "טלמטריה")
 
 #if LCD_W >= 212
@@ -546,8 +544,13 @@
 #define TR_CHANNEL2FAILSAFE            "הגדר מצב נוכחי כקבוע"
 #define TR_MENUMODELSEL                TR("MODELSEL", "MODEL SELECTION")
 #define TR_MENU_MODEL_SETUP            TR("הגדרות מודל", "הגדרות מודל")
+#if defined(SURFACE_RADIO)
+#define TR_MENUFLIGHTMODES             "DRIVE MODES"
+#define TR_MENUFLIGHTMODE              "DRIVE MODE"
+#else
 #define TR_MENUFLIGHTMODES             "מצבי טיסה"
 #define TR_MENUFLIGHTMODE              "מצב טיסה"
+#endif
 #define TR_MENUHELISETUP               "הגדרות מסוק"
 
   #define TR_MENUINPUTS                "כניסות"
