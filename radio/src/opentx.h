@@ -668,9 +668,6 @@ enum FunctionsActive {
 #if defined(HARDWARE_TOUCH)
   FUNCTION_DISABLE_TOUCH,
 #endif
-#if defined(LED_STRIP_GPIO)
-  FUNCTION_RGBLED,
-#endif
 };
 
 #define VARIO_FREQUENCY_ZERO   700/*Hz*/

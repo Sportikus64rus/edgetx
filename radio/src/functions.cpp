@@ -412,47 +412,6 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
             }
             break;
 
-#if defined(LED_STRIP_GPIO)
-          case FUNC_RGB_LED:
-            newActiveFunctions |= (1u << FUNCTION_RGBLED);
-
-            switch (CFN_PARAM(cfn)) {
-              case FUNC_RGBLEDS_LUA:
-                // color values are set using LUA
-                break;
-
-              case FUNC_RGBLEDS_WHITE:
-                for (uint8_t i = 0; i < LED_STRIP_LENGTH; i++) {
-                  rgbSetLedColor(i, 50, 50, 50);
-                }
-                break;
-
-              case FUNC_RGBLEDS_BLUE:
-                for (uint8_t i = 0; i < LED_STRIP_LENGTH; i++) {
-                  rgbSetLedColor(i, 0, 0, 50);
-                }
-                break;
-
-              case FUNC_RGBLEDS_RED:
-                for (uint8_t i = 0; i < LED_STRIP_LENGTH; i++) {
-                  rgbSetLedColor(i, 50, 0, 0);
-                }
-                break;
-
-              case FUNC_RGBLEDS_YELLOW:
-                for (uint8_t i = 0; i < LED_STRIP_LENGTH; i++) {
-                  rgbSetLedColor(i, 50, 50, 0);
-                }
-                break;
-
-              case FUNC_RGBLEDS_GREEN:
-                for (uint8_t i = 0; i < LED_STRIP_LENGTH; i++) {
-                  rgbSetLedColor(i, 0, 50, 0);
-                }
-                break;
-            }
-            break;
-#endif
 #if defined(PXX2)
           case FUNC_RACING_MODE:
             if (isRacingModeEnabled()) {

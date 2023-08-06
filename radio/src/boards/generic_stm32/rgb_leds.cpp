@@ -53,11 +53,6 @@ static void rgbLedTimerCb(TimerHandle_t xTimer)
 {
   (void)xTimer;
 
-  if (!isFunctionActive(FUNCTION_RGBLED)) {
-    for (uint8_t i = 0; i < LED_STRIP_LENGTH; i++) {
-      rgbSetLedColor(i, 0, 0, 0);
-    }
-  }
   ws2812_update(&_led_timer);
 }
 

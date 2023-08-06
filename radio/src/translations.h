@@ -156,7 +156,6 @@ extern const char* const STR_VMLTPX2[];
 extern const char* const STR_VCSWFUNC[];
 extern const char* const STR_VFSWRESET[];
 extern const char* const STR_FUNCSOUNDS[];
-extern const char* const STR_FUNCRGBLEDS[];
 extern const char* const STR_VTELEMUNIT[];
 extern const char* const STR_GPSFORMAT[];
 extern const char* const STR_VTELEMSCREENTYPE[];

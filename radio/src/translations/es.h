@@ -129,7 +129,6 @@
 
 #define TR_VFSWRESET           TR_FSW_RESET_TIMERS,TR("Todo","Vuelo"),TR_FSW_RESET_TELEM
 
-#define TR_FUNCRGBLEDS                 "LUA","White","Blue","Red","Yellow","Green"
 #define TR_FUNCSOUNDS          TR("Bp1","Beep1"),TR("Bp2","Beep2"),TR("Bp3","Beep3"),TR("Avs1","Aviso1"),TR("Avs2","Aviso2"),TR("Chee","Cheep"),TR("Rata","Ratata"),"Tick",TR("Sirn","Siren"),"Ring",TR("SciF","SciFi"),TR("Robt","Robot"),TR("Chrp","Chirp"),"Tada",TR("Crck","Crickt"),TR("Alrm","AlmClk")
 
 #define LENGTH_UNIT_IMP        "ft"

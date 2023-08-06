@@ -1407,19 +1407,10 @@ static void r_customFn(void* user, uint8_t* data, uint32_t bitoffs,
     }
     break;
 
-  case FUNC_RGB_LED:
-    // find "," and cut val_len
-    for (unsigned i=0; i < DIM(_func_rgbled_lookup); i++) {
-      if (!strncmp(_func_rgbled_lookup[i],val,l_sep)) {
-        CFN_PARAM(cfn) = i;
-        break;
-      }
-    }
-    break;
-
   case FUNC_PLAY_TRACK:
   case FUNC_BACKGND_MUSIC:
   case FUNC_PLAY_SCRIPT:
+  case FUNC_RGB_LED:
     strncpy(cfn->play.name, val, std::min<uint8_t>(l_sep, LEN_FUNCTION_NAME));
     break;
 
@@ -1623,15 +1614,10 @@ static bool w_customFn(void* user, uint8_t* data, uint32_t bitoffs,
     if (!wf(opaque, str, strlen(str))) return false;
     break;
 
-  case FUNC_RGB_LED:
-    // Lua, WHite, Blue, Red, Yellow, Green
-    str = _func_rgbled_lookup[CFN_PARAM(cfn)];
-    if (!wf(opaque, str, strlen(str))) return false;
-    break;
-
   case FUNC_PLAY_TRACK:
   case FUNC_BACKGND_MUSIC:
   case FUNC_PLAY_SCRIPT:
+  case FUNC_RGB_LED:
     if (!wf(opaque, cfn->play.name, strnlen(cfn->play.name, LEN_FUNCTION_NAME)))
       return false;
     break;
