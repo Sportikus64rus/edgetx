@@ -596,6 +596,7 @@ enum Functions {
   FUNC_DISABLE_TOUCH,
   FUNC_SET_SCREEN,
 #endif
+  FUNC_RGB_LED,
 #if defined(DEBUG)
   FUNC_TEST,  // should remain the last before MAX as not added in Companion
 #endif
@@ -675,6 +676,16 @@ enum ModelOverridableEnable {
   OVERRIDE_ON
 };
 
+// List of modes available for RGB leds
+enum FunctionRgbLedsParams {
+  FUNC_RGBLEDS_LUA,
+  FUNC_RGBLEDS_WHITE,
+  FUNC_RGBLEDS_BLUE,
+  FUNC_RGBLEDS_RED,
+  FUNC_RGBLEDS_YELLOW,
+  FUNC_RGBLEDS_GREEN,
+  FUNC_RGBLEDS_MAX SKIP = FUNC_RGBLEDS_GREEN
+};
 #define SELECTED_THEME_NAME_LEN 26
 
 #endif // _DATACONSTANTS_H_

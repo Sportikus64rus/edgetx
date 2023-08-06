@@ -354,6 +354,13 @@ void menuSpecialFunctions(event_t event, CustomFunctionData * functions, CustomF
               INCDEC_ENABLE_CHECK(isSourceAvailable);
             }
           }
+          else if (func == FUNC_RGB_LED) {
+            val_max = FUNC_RGBLEDS_MAX;
+            lcdDrawTextAtIndex(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, STR_FUNCRGBLEDS, val_displayed, attr);
+            if (active) {
+              CFN_PARAM(cfn) = CHECK_INCDEC_PARAM(event, val_displayed, val_min, val_max);
+            }
+          }
 #if defined(SDCARD)
           else if (func == FUNC_LOGS) {
             val_min = SD_LOGS_PERIOD_MIN; 

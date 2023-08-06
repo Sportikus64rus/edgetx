@@ -105,6 +105,7 @@
 #define TR_SF_FAILSAFE                 "Nastavit Failsafe"
 #define TR_SF_RANGE_CHECK              "Kontrola dosahu"
 #define TR_SF_MOD_BIND                 "ModuleBind"
+#define TR_SF_RGBLEDS                  "RGB leds"
 
 #define TR_SOUND                       TR3("\200\201Zvuk", "\200\201Zvuk", "Hrát zvuk")
 #define TR_PLAY_TRACK                  TR3("\200\201Stopa", "\200\201Stopa", "Přehrát wav")
@@ -134,6 +135,7 @@
 #endif
 
 #define TR_VFSWRESET                   TR_FSW_RESET_TIMERS,"Vše",TR_FSW_RESET_TELEM
+#define TR_FUNCRGBLEDS                 "LUA","White","Blue","Red","Yellow","Green"
 #define TR_FUNCSOUNDS                  TR("Píp1","Pípnutí1"),TR("Píp2","Pípnutí2"),TR("Píp3","Pípnutí3"),TR("Var1","Varování1"),TR("Var2","Varování2"),TR("Chee","Cheep"),TR("Rata", "Ratata"),"Tick",TR("Sirn","Siréna"),"Ring",TR("SciF","SciFi"),TR("Robt","Robot"),TR("Chrp","Chirp"),"Tada",TR("Crck","Crickt"),TR("Alrm","AlmClk")
 
 #define LENGTH_UNIT_IMP                "ft"

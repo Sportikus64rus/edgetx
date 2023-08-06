@@ -83,6 +83,7 @@ const struct YamlIdStr enum_Functions[] = {
   {  FUNC_RACING_MODE, "RACING_MODE"  },
   {  FUNC_DISABLE_TOUCH, "DISABLE_TOUCH"  },
   {  FUNC_SET_SCREEN, "SET_SCREEN"  },
+  {  FUNC_RGB_LED, "RGB_LED"  },
   {  0, NULL  }
 };
 const struct YamlIdStr enum_ZoneOptionValueEnum[] = {

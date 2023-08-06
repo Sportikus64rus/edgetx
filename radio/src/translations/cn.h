@@ -91,6 +91,7 @@
 #define TR_SF_FAILSAFE                 "设置失控保护"
 #define TR_SF_RANGE_CHECK              "测距模式"
 #define TR_SF_MOD_BIND                 "模块对频"
+#define TR_SF_RGBLEDS                  "RGB leds"
 
 #define TR_SOUND                       "播放声音"
 #define TR_PLAY_TRACK                  "播放音频文件"
@@ -122,6 +123,7 @@
 
 #define TR_VFSWRESET                   TR_FSW_RESET_TIMERS,TR("全部","飞行"),TR_FSW_RESET_TELEM
 
+#define TR_FUNCRGBLEDS                 "LUA","White","Blue","Red","Yellow","Green"
 #define TR_FUNCSOUNDS                  TR("Bp1","Beep1"),TR("Bp2","Beep2"),TR("Bp3","Beep3"),TR("Wrn1","Warn1"),TR("Wrn2","Warn2"),TR("Chee","Cheep"),TR("Rata","Ratata"),"Tick",TR("Sirn","Siren"),"Ring",TR("SciF","SciFi"),TR("Robt","Robot"),TR("Chrp","Chirp"),"Tada",TR("Crck","Crickt"),TR("Alrm","AlmClk")
 
 #define LENGTH_UNIT_IMP                "ft"
