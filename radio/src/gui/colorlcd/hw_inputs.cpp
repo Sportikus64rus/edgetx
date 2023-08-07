@@ -42,6 +42,9 @@ static const lv_coord_t col_two_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(2),
 static const lv_coord_t col_three_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(2),
                                          LV_GRID_TEMPLATE_LAST};
 
+static const lv_coord_t col_four_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(2),LV_GRID_FR(3),
+                                           LV_GRID_TEMPLATE_LAST};
+
 static const lv_coord_t row_dsc[] = {LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 
 HWSticks::HWSticks(Window* parent) : FormWindow(parent, rect_t{})
@@ -71,7 +74,7 @@ HWSticks::HWSticks(Window* parent) : FormWindow(parent, rect_t{})
 
 HWPots::HWPots(Window* parent) : FormWindow(parent, rect_t{})
 {
-  FlexGridLayout grid(col_three_dsc, row_dsc, 2);
+  FlexGridLayout grid(col_four_dsc, row_dsc, 2);
   setFlexLayout();
 
   auto max_pots = adcGetMaxInputs(ADC_INPUT_FLEX);
@@ -84,21 +87,24 @@ HWPots::HWPots(Window* parent) : FormWindow(parent, rect_t{})
     new StaticText(line, rect_t{}, adcGetInputLabel(ADC_INPUT_FLEX, i), 0,
                    COLOR_THEME_PRIMARY1);
 
-    new HWInputEdit(line, (char*)analogGetCustomLabel(ADC_INPUT_FLEX, i), LEN_ANA_NAME);
+    new HWInputEdit(line, (char*)analogGetCustomLabel(ADC_INPUT_FLEX, i),
+                    LEN_ANA_NAME);
     auto pot = new Choice(
         line, rect_t{}, STR_POTTYPES, FLEX_NONE, FLEX_SWITCH,
-        [=]() -> int {
-          return bfGet<potconfig_t>(g_eeGeneral.potsConfig, POT_CFG_BITS * i,
-                                 POT_CFG_BITS);
-        },
+        [=]() -> int { return getPotType(i); },
         [=](int newValue) {
-          g_eeGeneral.potsConfig = bfSet<potconfig_t>(
-              g_eeGeneral.potsConfig, newValue, POT_CFG_BITS * i, POT_CFG_BITS);
-          switchFixFlexConfig();          
+          setPotType(i, newValue);
+          switchFixFlexConfig();
           SET_DIRTY();
         });
-      pot->setAvailableHandler(
-        [=](int val) { return isPotTypeAvailable(val); });
+    pot->setAvailableHandler([=](int val) { return isPotTypeAvailable(val); });
+
+    new ToggleSwitch(
+        line, rect_t{}, [=]() -> uint8_t { return (uint8_t)getPotInversion(i); },
+        [=](int8_t newValue) {
+          setPotInversion(i, newValue);
+          SET_DIRTY();
+        });
   }
 }
 
