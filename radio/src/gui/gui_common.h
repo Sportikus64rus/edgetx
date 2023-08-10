@@ -100,7 +100,7 @@ bool isTelemetryProtocolAvailable(int protocol);
 bool isTrainerModeAvailable(int mode);
 bool isAssignableFunctionAvailable(int function, CustomFunctionData * functions);
 bool isPotTypeAvailable(uint8_t type);
-bool isFlexSwicthSourceValid(int source);
+bool isFlexSwitchSourceValid(int source);
 bool getPotInversion(int index);
 void setPotInversion(int index, bool value);
 uint8_t getPotType(int index);
