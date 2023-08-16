@@ -68,6 +68,10 @@ void watchdogInit(unsigned int duration)
 extern "C" void initialise_monitor_handles();
 #endif
 
+#if defined(SPI_FLASH)
+extern "C" void flushFTL();
+#endif
+
 void delay_self(int count)
 {
    for (int i = 50000; i > 0; i--)
@@ -268,6 +272,10 @@ void boardInit()
 void boardOff()
 {
 //  lcd->drawFilledRect(0, 0, LCD_W, LCD_H, SOLID, COLOR_THEME_FOCUS);
+#if defined(SPI_FLASH)
+  flushFTL();
+#endif
+
   lcdOff();
 
   while (pwrPressed()) {

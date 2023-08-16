@@ -27,7 +27,7 @@
 #if defined (USE_LITTLEFS)
 #include "littlefs_v2.4.1/lfs.h"
 #else
-#include "tjftl/tjftl.h"
+#include "frftl/frftl.h"
 #include "FatFs/ff.h"
 #endif
 #endif

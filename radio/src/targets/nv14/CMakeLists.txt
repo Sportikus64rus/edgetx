@@ -47,7 +47,8 @@ if(SPI_FLASH)
     add_definitions(-DUSE_LITTLEFS)
   else()
     set(TARGET_SRC ${TARGET_SRC}
-        ../../thirdparty/tjftl/tjftl.c
+        ../../thirdparty/frftl/frftl.cpp
+        ../../crc.cpp
     )
   endif()
 endif()
@@ -57,8 +58,9 @@ if(BOOTLOADER)
   set(FIRMWARE_TARGET_SRC ${FIRMWARE_TARGET_SRC}
     ../common/arm/stm32/diskio_sdio_spiflash.cpp
     ../common/arm/stm32/flash_spi_driver.cpp
-    ../../thirdparty/tjftl/tjftl.c
-  )
+    ../../thirdparty/frftl/frftl.cpp
+    ../../crc.cpp
+    )
 else()
   set(LINKER_SCRIPT targets/nv14/stm32f4_flash.ld)
 endif()

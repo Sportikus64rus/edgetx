@@ -257,6 +257,10 @@ void boardInit()
 
 void boardOff()
 {
+#if defined(SPI_FLASH)
+  flushFTL();
+#endif
+
   lcdOff();
 
   while (pwrPressed()) {

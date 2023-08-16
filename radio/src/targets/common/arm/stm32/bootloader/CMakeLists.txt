@@ -46,7 +46,8 @@ if(SPI_FLASH)
 set(BOOTLOADER_SRC
   ${BOOTLOADER_SRC}
   ../../../../../targets/common/arm/stm32/flash_spi_driver.cpp
-  ../../../../../thirdparty/tjftl/tjftl.c
+  ../../../../../thirdparty/frftl/frftl.cpp
+  ../../../../../crc.cpp
   )
 endif()
 
