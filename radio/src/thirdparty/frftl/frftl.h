@@ -58,8 +58,9 @@ extern "C" {
 
   FrFTL* ftlInit(FlashReadCB rf, FlashProgramCB pf, FlashEraseCB ef, IsFlashErasedCB ief, uint8_t flashSizeInMB);
   void ftlDeInit(FrFTL *ftl);
-  bool ftlWriteSector(FrFTL* ftl, uint32_t startSectorNo, uint32_t noOfSectors, const uint8_t* buf);
-  bool ftlReadSector(FrFTL* ftl, uint32_t sectorNo, uint8_t* buffer);
+  bool ftlWrite(FrFTL* ftl, uint32_t startSectorNo, uint32_t noOfSectors, const uint8_t* buf);
+  bool ftlRead(FrFTL* ftl, uint32_t sectorNo, uint8_t* buffer);
+  bool ftlTrim(FrFTL* ftl, uint32_t startSectorNo, uint32_t noOfSectors);
   bool ftlSync(FrFTL* ftl);
 
 #ifdef __cplusplus

@@ -272,7 +272,7 @@ DRESULT __disk_read(BYTE drv, BYTE * buff, DWORD sector, UINT count)
     }
     while(count)
     {
-      if(!ftlReadSector(frftl, sector, (uint8_t*)buff))
+      if(!ftlRead(frftl, sector, (uint8_t*)buff))
         return RES_ERROR;
       buff += 512;
       sector++;
@@ -341,7 +341,7 @@ DRESULT __disk_write(
       res = RES_ERROR;
       return res;
     }
-    if (!ftlWriteSector(frftl, sector, count, (uint8_t*)buff))
+    if (!ftlWrite(frftl, sector, count, (uint8_t*)buff))
       return RES_ERROR;
     return res;
   }
@@ -437,6 +437,11 @@ DRESULT disk_ioctl (
 
       case CTRL_SYNC:
         if (ftlSync(frftl))
+          res = RES_OK;
+        break;
+
+      case CTRL_TRIM:
+        if (ftlTrim(frftl, *(DWORD*)buff, 1 + *((DWORD*)buff + 1) - *(DWORD*)buff))
           res = RES_OK;
         break;
 
