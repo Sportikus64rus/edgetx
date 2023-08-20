@@ -19,8 +19,12 @@
  * GNU General Public License for more details.
  */
 
-#include "opentx.h"
+#include "stm32_timer.h"
 #include "watchdog_driver.h"
+#include "hal.h"
+
+// needed for per10ms() and timer debug macros
+#include "opentx.h"
 
 static volatile uint32_t msTickCount;  // Used to get 1 kHz counter
 static volatile uint32_t _us_overflow_cnt;
@@ -29,6 +33,8 @@ static volatile uint32_t _us_overflow_cnt;
 void init2MhzTimer()
 {
   _us_overflow_cnt = 0;
+  stm32_timer_enable_clock(TIMER_2MHz_TIMER);
+
   TIMER_2MHz_TIMER->PSC = (PERI1_FREQUENCY * TIMER_MULT_APB1) / 2000000 - 1; // 0.5 uS, 2 MHz
   TIMER_2MHz_TIMER->ARR = 65535;
   TIMER_2MHz_TIMER->CR2 = 0;
@@ -43,6 +49,7 @@ void init2MhzTimer()
 void init1msTimer()
 {
   msTickCount = 0;
+  stm32_timer_enable_clock(INTERRUPT_xMS_TIMER);
 
   INTERRUPT_xMS_TIMER->ARR = 999; // 1mS in uS
   INTERRUPT_xMS_TIMER->PSC = (PERI1_FREQUENCY * TIMER_MULT_APB1) / 1000000 - 1;  // 1uS

@@ -95,7 +95,8 @@ enum {
 #if defined(SIMU)
   #define SD_CARD_PRESENT()             true
 #else
-  #define SD_CARD_PRESENT()             (~SD_PRESENT_GPIO->IDR & SD_PRESENT_GPIO_PIN)
+  bool sdcard_present();
+  #define SD_CARD_PRESENT()             sdcard_present()
 #endif
 
 // Flash Write driver
@@ -105,9 +106,6 @@ void lockFlash();
 void flashWrite(uint32_t * address, const uint32_t * buffer);
 uint32_t isFirmwareStart(const uint8_t * buffer);
 uint32_t isBootloaderStart(const uint8_t * buffer);
-
-// SDRAM driver
-void SDRAM_Init();
 
 #if defined(INTERNAL_MODULE_PXX1) || defined(INTERNAL_MODULE_PXX2)
   #define HARDWARE_INTERNAL_RAS
@@ -124,21 +122,20 @@ void SDRAM_Init();
 //
 #define INTERNAL_MODULE_ON()                                  \
   do {                                                        \
-    GPIO_SetBits(INTMODULE_PWR_GPIO, INTMODULE_PWR_GPIO_PIN); \
+    gpio_set(INTMODULE_PWR_GPIO);			      \
     delay_ms(1);                                              \
   } while (0)
 
 #else
 
 // Just turn the modue ON for all other targets
-#define INTERNAL_MODULE_ON() \
-  GPIO_SetBits(INTMODULE_PWR_GPIO, INTMODULE_PWR_GPIO_PIN)
+#define INTERNAL_MODULE_ON()    gpio_set(INTMODULE_PWR_GPIO)
 
 #endif
 
-#define INTERNAL_MODULE_OFF()   GPIO_ResetBits(INTMODULE_PWR_GPIO, INTMODULE_PWR_GPIO_PIN)
-#define EXTERNAL_MODULE_ON()    GPIO_SetBits(EXTMODULE_PWR_GPIO, EXTMODULE_PWR_GPIO_PIN)
-#define EXTERNAL_MODULE_OFF()   GPIO_ResetBits(EXTMODULE_PWR_GPIO, EXTMODULE_PWR_GPIO_PIN)
+#define INTERNAL_MODULE_OFF()   gpio_clear(INTMODULE_PWR_GPIO)
+#define EXTERNAL_MODULE_ON()    gpio_set(EXTMODULE_PWR_GPIO)
+#define EXTERNAL_MODULE_OFF()   gpio_clear(EXTMODULE_PWR_GPIO)
 
 #if !defined(PXX2)
   #define IS_PXX2_INTERNAL_ENABLED()            (false)

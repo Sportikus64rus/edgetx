@@ -44,6 +44,11 @@
 extern volatile uint32_t WriteStatus;
 extern volatile uint32_t ReadStatus;
 
+bool sdcard_present()
+{
+  return SD_Detect();
+}
+
 /*-----------------------------------------------------------------------*/
 /* Inidialize a Drive                                                    */
 

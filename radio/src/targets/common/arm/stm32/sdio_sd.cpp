@@ -20,11 +20,13 @@
 
 #include "sdio_sd.h"
 #include "stm32_dma.h"
+#include "stm32_gpio.h"
 #include "stm32_gpio_driver.h"
 
 #include "stm32_hal_ll.h"
 #include "stm32_hal.h"
 
+#include "hal/gpio.h"
 #include "hal.h"
 
 #include "delays_driver.h"
@@ -199,7 +201,7 @@ uint8_t SD_Detect(void)
   __IO uint8_t status = SD_PRESENT;
 
   /*!< Check GPIO to detect SD */
-  if ((LL_GPIO_ReadInputPort(SD_PRESENT_GPIO) & SD_PRESENT_LL_GPIO_PIN) != 0) {
+  if (gpio_read(SD_PRESENT_GPIO) != 0) {
     status = SD_NOT_PRESENT;
   }
 
