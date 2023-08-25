@@ -207,25 +207,25 @@
 
 #if defined(COLORLCD)
 #if defined(BOLD)
-#define TR_FONT_SIZES                  "STD"
+#define TR_FONT_SIZES                  "СТД"
 #else
-#define TR_FONT_SIZES                  "STD","BOLD","XXS","XS","L","XL","XXL"
+#define TR_FONT_SIZES                  "СТД","ЖИРН","XXS","XS","L","XL","XXL"
 #endif
 #endif
 
 #if defined(PCBFRSKY)
-  #define TR_ENTER                     "[ENTER]"
+  #define TR_ENTER                     "[ВВОД]"
 #elif defined(PCBNV14)
-  #define TR_ENTER                     "[NEXT]"
+  #define TR_ENTER                     "[СЛЕД]"
 #else
-  #define TR_ENTER                     "[MENU]"
+  #define TR_ENTER                     "[МЕНЮ]"
 #endif
 
 #if defined(COLORLCD)
-  #define TR_EXIT                      "RTN"
+  #define TR_EXIT                      "ВОЗВРАТ"
   #define TR_OK                        TR_ENTER
 #else
-  #define TR_EXIT                      "EXIT"
+  #define TR_EXIT                      "ВЫХОД"
   #define TR_OK                        TR("\010" "\010" "\010" "[OK]", "\010" "\010" "\010" "\010" "\010" "[OK]")
 #endif
 
@@ -262,7 +262,7 @@
 #define TR_TTRIM_SW                    TR("T-Trim-Sw", INDENT "Trim switch")
 #define TR_BEEPCTR                     TR("Beep Ctr", "Beep Centr")
 #define TR_USE_GLOBAL_FUNCS            TR("Funcs.Glob", "Usar func.global")
-#define TR_PROTOCOL                    TR("Proto", "Protocolo")
+#define TR_PROTOCOL                    TR("ПРОТО", "ПРОТОКОЛ")
   #define TR_PPMFRAME                  INDENT "frame PPM"
   #define TR_REFRESHRATE               TR(INDENT "Refresh", INDENT "Refresh rate")
   #define STR_WARN_BATTVOLTAGE         TR(INDENT "Saida em VBAT: ", INDENT "Alert: nivel saida em VBAT: ")
@@ -306,7 +306,7 @@
 #define TR_FLMODE                      TR("Modo", "Modos")
 #define TR_MIXWARNING                  "Alerta"
 #define TR_OFF                         "DESL"
-#define TR_ANTENNA                     "Antena"
+#define TR_ANTENNA                     "Антена"
 #define TR_NO_INFORMATION              TR("No info", "No information")
 #define TR_MULTPX                      "Multiplex"
 #define TR_DELAYDOWN                   TR("Delay dn", "Delay down")
@@ -321,7 +321,7 @@
 #define TR_GV                          TR("G", "GV")
 #endif
 #define TR_RANGE                       INDENT "Alcance"
-#define TR_CENTER                      INDENT "Centro"
+#define TR_CENTER                      INDENT "Центр"
 #define TR_ALARM                       "Alarme"
 #define TR_BLADES                      "Laminas/Pas"
 #define TR_SCREEN                      "Tela\001"
@@ -333,8 +333,8 @@
 #define TR_STRENGTH                    "Forca"
 #define TR_IMU_LABEL                   "IMU"
 #define TR_IMU_OFFSET                  "Offset"
-#define TR_IMU_MAX                     "Max"
-#define TR_CONTRAST                    "Contrast"
+#define TR_IMU_MAX                     "Макс"
+#define TR_CONTRAST                    "Контраст"
 #define TR_ALARMS_LABEL                "Alarmes"
 #define TR_BATTERY_RANGE               TR("Faixa Batt.", "Faixa Med. Bateria")
 #define TR_BATTERYCHARGING             "Carregando..."
@@ -1177,24 +1177,24 @@
 // End Main menu
 
 // Voice in native language
-#define TR_VOICE_ENGLISH                "Ingles"
-#define TR_VOICE_CHINESE                "Chines"
-#define TR_VOICE_CZECH                  "Tcheco"
-#define TR_VOICE_DANISH                 "Dinamarques"
-#define TR_VOICE_DEUTSCH                "Alemao"
-#define TR_VOICE_DUTCH                  "Holandes"
-#define TR_VOICE_ESPANOL                "Espanhol"
-#define TR_VOICE_FRANCAIS               "Frances"
-#define TR_VOICE_HUNGARIAN              "Hungaro"
-#define TR_VOICE_ITALIANO               "Italiano"
-#define TR_VOICE_POLISH                 "Polones"
-#define TR_VOICE_PORTUGUES              "Portugues"
-#define TR_VOICE_RUSSIAN                "Russo"
-#define TR_VOICE_SLOVAK                 "Eslovaco"
-#define TR_VOICE_SWEDISH                "Sueco"
-#define TR_VOICE_TAIWANESE              "Taiwanes"
-#define TR_VOICE_JAPANESE               "Japones"
-#define TR_VOICE_HEBREW                 "Hebraico"
+#define TR_VOICE_ENGLISH                "Англискийский"
+#define TR_VOICE_CHINESE                "Китайский"
+#define TR_VOICE_CZECH                  "Черский"
+#define TR_VOICE_DANISH                 "Датский"
+#define TR_VOICE_DEUTSCH                "Немецкий"
+#define TR_VOICE_DUTCH                  "Голандский"
+#define TR_VOICE_ESPANOL                "Испанский"
+#define TR_VOICE_FRANCAIS               "Французский"
+#define TR_VOICE_HUNGARIAN              "Венгерский"
+#define TR_VOICE_ITALIANO               "Итальянский"
+#define TR_VOICE_POLISH                 "Польский"
+#define TR_VOICE_PORTUGUES              "Португальский"
+#define TR_VOICE_RUSSIAN                "Русский"
+#define TR_VOICE_SLOVAK                 "Словацкий"
+#define TR_VOICE_SWEDISH                "Шведский"
+#define TR_VOICE_TAIWANESE              "Тайваньский"
+#define TR_VOICE_JAPANESE               "Японский"
+#define TR_VOICE_HEBREW                 "Еврейский"
 
 #define TR_USBJOYSTICK_LABEL           "Joystick USB"
 #define TR_USBJOYSTICK_EXTMODE         "Modo"
