@@ -45,7 +45,7 @@
 #define TR_MINUTE_PLURAL1             "минуты"
 #define TR_MINUTE_PLURAL2             "минуты"
 
-#define TR_OFFON                       "OFF","ON"
+#define TR_OFFON                       "ВЫК","ВКЛ"
 #define TR_MMMINV                      "---","INV"
 #define TR_VBEEPMODE                   "Mudo","Alarmes","Sem Botao","Todos"
 #define TR_VBLMODE                     "OFF","Botoes",TR("Ctrl","Controles"),"Ambos","ON"
