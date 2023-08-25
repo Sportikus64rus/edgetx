@@ -41,9 +41,9 @@
 // If the number of minutes is above this value PLURAL2 is used
 #define TR_USE_PLURAL2 INT_MAX
 
-#define TR_MINUTE_SINGULAR            "minuto"
-#define TR_MINUTE_PLURAL1             "minutos"
-#define TR_MINUTE_PLURAL2             "minutos"
+#define TR_MINUTE_SINGULAR            "минута"
+#define TR_MINUTE_PLURAL1             "минуты"
+#define TR_MINUTE_PLURAL2             "минуты"
 
 #define TR_OFFON                       "OFF","ON"
 #define TR_MMMINV                      "---","INV"
