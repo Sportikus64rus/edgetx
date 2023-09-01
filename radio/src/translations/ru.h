@@ -266,7 +266,7 @@
 #define TR_SWITCH                      "Switch"
 #define TR_FUNCTION_SWITCHES           "Customizable Switches"
 #define TR_SF_SWITCH                   "Trigger"
-#define TR_TRIMS                       "Trims"
+#define TR_TRIMS                       "Тримы"
 #define TR_FADEIN                      "Fade in"
 #define TR_FADEOUT                     "Fade out"
 #define TR_DEFAULT                     "(default)"
