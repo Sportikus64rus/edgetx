@@ -80,7 +80,7 @@ enum TrainerMode {
   TRAINER_MODE_SLAVE_JACK,
   TRAINER_MODE_MASTER_SBUS_EXTERNAL_MODULE,
   TRAINER_MODE_MASTER_CPPM_EXTERNAL_MODULE,
-  TRAINER_MODE_MASTER_BATTERY_COMPARTMENT,
+  TRAINER_MODE_MASTER_SERIAL,
   TRAINER_MODE_MASTER_BLUETOOTH,
   TRAINER_MODE_SLAVE_BLUETOOTH,
   TRAINER_MODE_MULTI,
@@ -129,6 +129,7 @@ class ModelData {
     char      filename[16+1];
     char      labels[100];
     int       modelIndex;      // Companion only, temporary index position managed by data model.
+    bool      modelUpdated;    // Companion only, used to highlight if changed in models list
 
     TimerData timers[CPN_MAX_TIMERS];
     bool      noGlobalFunctions;
@@ -326,8 +327,8 @@ class ModelData {
 
     QString trainerModeToString() const;
     static QString trainerModeToString(const int value);
-    static bool isTrainerModeAvailable(const GeneralSettings & generalSettings, const Firmware * firmware, const int value);
-    static AbstractStaticItemModel * trainerModeItemModel(const GeneralSettings & generalSettings, const Firmware * firmware);
+    bool isTrainerModeAvailable(const GeneralSettings & generalSettings, const Firmware * firmware, const int value);
+    AbstractStaticItemModel * trainerModeItemModel(const GeneralSettings & generalSettings, const Firmware * firmware);
     unsigned int getFuncSwitchConfig(unsigned int index) const;
     void setFuncSwitchConfig(unsigned int index, unsigned int value);
     static QString funcSwitchConfigToString(unsigned int value);
