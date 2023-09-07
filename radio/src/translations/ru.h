@@ -465,12 +465,12 @@
 #define TR_CHANNEL2FAILSAFE            "Channel=>Failsafe"
 #define TR_MENUMODELSEL                TR("MODELSEL", "MODEL SELECTION")
 #define TR_MENU_MODEL_SETUP            TR("SETUP", "MODEL SETUP")
-#define TR_MENUFLIGHTMODES             "FLIGHT MODES"
-#define TR_MENUFLIGHTMODE              "FLIGHT MODE"
-#define TR_MENUHELISETUP               "HELI SETUP"
+#define TR_MENUFLIGHTMODES             "МЕНЮ РЕЖИМОВ ПОЛЕТА"
+#define TR_MENUFLIGHTMODE              "РЕЖИМ ПОЛЕТА"
+#define TR_MENUHELISETUP               "МЕНЮ НАСТРОЙКИ ВЕРТОЛЕТА"
 
-  #define TR_MENUINPUTS                "INPUTS"
-  #define TR_MENULIMITS                "OUTPUTS"
+  #define TR_MENUINPUTS                "ВВОД"
+  #define TR_MENULIMITS                "ВЫВОД"
 #define TR_MENUCURVES                  "CURVES"
 #define TR_MENUCURVE                   "CURVE"
 #define TR_MENULOGICALSWITCH           "LOGICAL SWITCH"
@@ -1165,16 +1165,16 @@
 #define TR_THEME_EDITOR                 "ТЕМЫ"
 
 // Main menu
-#define TR_MAIN_MENU_SELECT_MODEL       "Select\nModel"
-#define TR_MAIN_MENU_MANAGE_MODELS      "Manage\nModels"
-#define TR_MAIN_MENU_MODEL_NOTES        "Model\nNotes"
-#define TR_MAIN_MENU_CHANNEL_MONITOR    "Channel\nMonitor"
-#define TR_MAIN_MENU_MODEL_SETTINGS     "Model\nSettings"
-#define TR_MAIN_MENU_RADIO_SETTINGS     "Radio\nSettings"
-#define TR_MAIN_MENU_SCREEN_SETTINGS    "Screens\nSettings"
-#define TR_MAIN_MENU_RESET_TELEMETRY    "Reset\nTelemetry"
-#define TR_MAIN_MENU_STATISTICS         "Statistics"
-#define TR_MAIN_MENU_ABOUT_EDGETX       "About\nEdgeTX"
+#define TR_MAIN_MENU_SELECT_MODEL       "ВЫБОР МОДЕЛИ"
+#define TR_MAIN_MENU_MANAGE_MODELS      "УПРАВЛЕНИЕ МОДЕЛЬЮ"
+#define TR_MAIN_MENU_MODEL_NOTES        "ПРИМЕЧАНИЯ"
+#define TR_MAIN_MENU_CHANNEL_MONITOR    "КАНАЛ\МОНИТОР"
+#define TR_MAIN_MENU_MODEL_SETTINGS     "МОДЕЛЬ\НАСТРОЙКИ"
+#define TR_MAIN_MENU_RADIO_SETTINGS     "РАДИО\НАСТРОЙКИ"
+#define TR_MAIN_MENU_SCREEN_SETTINGS    "ЭКРАН\НАСТРОЙКИ"
+#define TR_MAIN_MENU_RESET_TELEMETRY    "СБРОС\ТЕЛЕМЕТРИЯ"
+#define TR_MAIN_MENU_STATISTICS         "СТАТИСТИКА"
+#define TR_MAIN_MENU_ABOUT_EDGETX       "ОБ\EdgeTX"
 // End Main menu
 
 // Voice in native language
